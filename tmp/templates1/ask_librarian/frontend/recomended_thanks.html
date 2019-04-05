@@ -1,0 +1,34 @@
+{% extends 'ask_librarian/frontend/index.html' %}
+{% load cache %}
+{% block title %}
+    {% if LANGUAGE_CODE == 'ru' %}
+        Спроси библиотекаря
+    {% elif LANGUAGE_CODE == 'tt' %}
+        Китапханәчедән сора
+    {% else %}
+        Ask librarian
+    {% endif %}
+{% endblock %}
+{% block breadcrumb %}
+    <ul class="breadcrumb">
+        <li><a href="{% url 'index:frontend:index' %}">Начало</a> <span class="divider">/</span></li>
+        <li>
+            <a href="{% url 'ask_librarian:frontend:index' %}">
+                {% if LANGUAGE_CODE == 'ru' %}
+                    Спроси библиотекаря
+                {% elif LANGUAGE_CODE == 'tt' %}
+                    Китапханәчедән сора
+                {% else %}
+                    Ask librarian
+                {% endif %}
+            </a>
+            <span class="divider">/</span></li>
+        <li>Вопрос № {{ question.id }}</li>
+    </ul>
+{% endblock %}
+{% block index_content %}
+    <div class="alert alert-success">
+        Спасибо за рекомендацию. Мы обязательно её опубликуем после проверки, если она соответвет вопросу.
+    </div>
+    <a href="{% url 'ask_librarian:frontend:detail' question.id %}">Перейти к вопросу</a>
+{% endblock %}

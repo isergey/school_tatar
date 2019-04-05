@@ -18,7 +18,7 @@ TMB_SUFFIX = 'tmb'
 
 
 class News(models.Model):
-    library = models.ForeignKey(Library, on_delete=models.CASCADE)
+    library = models.ForeignKey(Library, on_delete=models.CASCADE, related_name='participants_library')
     show_avatar = models.BooleanField(verbose_name=u"Показывать аватарку", default=False)
     create_date = models.DateTimeField(default=datetime.now, verbose_name=u"Дата создания", db_index=True)
     order = models.IntegerField(default=0, verbose_name=u'Приоритет', db_index=True, help_text=u'Новости сортируются по приоритету, далее - по дате создания. 0 - по умолчанию.')

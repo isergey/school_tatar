@@ -1,0 +1,31 @@
+{% extends 'index/frontend/index.html' %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% block title %}{{ content.title }}{% endblock %}
+{% block content %}
+    <style type="text/css">
+    form.feedback_from textarea{
+        width: 99%;
+    }
+    </style>
+    <div class="span12">
+        <ul class="breadcrumb">
+            <li><a href="{% url 'index:frontend:index' %}">Начало</a> <span class="divider">/</span></li>
+            <li><a href="{% url 'guestbook:frontend:index' %}">
+                {% if LANGUAGE_CODE == 'ru' %}
+                    Гостевая книга
+                {% elif LANGUAGE_CODE == 'tt' %}
+                    Кунаклар китабы
+                {% else %}
+                    Guest book
+                {% endif %}
+            </a> <span class="divider">/</span></li>
+            <li class="active">Оставить запись</li>
+
+        </ul>
+        <div class="alert alert-success">
+            <p><b>Спасибо, что остались неравнодушными  к порталу!</b></p>
+            <p>Мы учтем Ваши пожелания и замечания. Ваш отзыв будет опубликован после проверки модератором на предмет спама.</p>
+        </div>
+    </div>
+{% endblock %}

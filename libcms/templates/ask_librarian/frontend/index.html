@@ -9,7 +9,7 @@
     {% elif LANGUAGE_CODE == 'tt' %}
         Китапханәчедән сора
     {% else %}
-        Ask librarian
+        Ask a librarian
     {% endif %}
 {% endblock %}
 
@@ -32,7 +32,13 @@
                         </li>
                         <li>
                              <span class="crumb__current">
-                                Спроси библиотекар
+                                {% if LANGUAGE_CODE == 'ru' %}
+                                    Спроси библиотекаря
+                                {% elif LANGUAGE_CODE == 'tt' %}
+                                    Китапханәчедән сора
+                                {% else %}
+                                    Ask a librarian
+                                {% endif %}
                             </span>
                         </li>
                     </ol>
@@ -40,35 +46,67 @@
             {% endblock %}
             <div class="ask-container">
                 <div class="row">
-                    <div class="col-lg-9 col-md-12">
-                        {% block index_content %}
 
-                        {% endblock %}
-                    </div>
                     {% if request.path_info != '/ask_librarian/ask' %}
                         <div class="col-lg-3 col-md-12">
                             <div class="ask-facet">
                                 <section class="card card_bs-2 card_facet">
                                     <div class="card__header">
-                                        <h2 class="card__title card__title_sm">Задать вопрос</h2>
+                                        <h2 class="card__title card__title_sm">
+                                            {% if LANGUAGE_CODE == 'ru' %}
+                                                Задать вопрос
+                                            {% elif LANGUAGE_CODE == 'tt' %}
+                                                Сорау бирү
+                                            {% else %}
+                                                Ask a question
+                                            {% endif %}
+                                        </h2>
                                     </div>
                                     <div class="card__body">
-                                        <p class="card__text">Ищете информацию? Подбираете литературу? Есть вопросы о
-                                            работе
-                                            библиотеки? Виртуальная справочная служба поможет.</p>
+                                        <p class="card__text">
+                                            {% if LANGUAGE_CODE == 'en' %}
+                                                Are you looking for information? Do you need literature? Do you have
+                                                questions about the libraries’ work? You are welcome to “Ask a Librarian”
+                                                virtual reference service!
+                                                <a href="{% url 'pages:frontend:show' 'inf_for_ask' %}">More details</a>.
+                                            {% elif LANGUAGE_CODE == 'tt' %}
+                                                Мәгълүмат эзлисез? Әдәбият сайлыйсыз? Китапханәнең эше турында
+                                                сорауларыгыз бар? Сезгә виртуаль белешмә хезмәте ярдәм итәчәк!
+                                                <a href="{% url 'pages:frontend:show' 'inf_for_ask' %}">Җентекле</a>.
+                                            {% else %}
+                                                Ищете информацию? Подбираете литературу? Есть вопросы о работе
+                                                библиотеки? Виртуальная справочная служба поможет!
+                                                <a href="{% url 'pages:frontend:show' 'inf_for_ask' %}">Подробнее</a>.
+                                            {% endif %}
+                                        </p>
                                     </div>
                                     <div class="card__footer">
                                         <ul class="card-nav">
                                             <li class="card-nav__item">
-                                                <a class="card-nav__link" href="{% url 'ask_librarian:frontend:ask' %}">Задать
-                                                    вопрос</a>
+                                                <a class="card-nav__link" href="{% url 'ask_librarian:frontend:ask' %}">
+                                                    {% if LANGUAGE_CODE == 'ru' %}
+                                                        Задать вопрос
+                                                    {% elif LANGUAGE_CODE == 'tt' %}
+                                                        Сорау бирү
+                                                    {% else %}
+                                                        Ask a question
+                                                    {% endif %}
+                                                </a>
                                             </li>
                                         </ul>
                                     </div>
                                 </section>
                                 <section class="card card_bs-2 card_mt card_facet">
                                     <div class="card__header">
-                                        <h2 class="card__title card__title_sm">Категории вопросов</h2>
+                                        <h2 class="card__title card__title_sm">
+                                            {% if LANGUAGE_CODE == 'ru' %}
+                                                Категории вопросов
+                                            {% elif LANGUAGE_CODE == 'tt' %}
+                                                Сораулар категорияләре
+                                            {% else %}
+                                                Questions breakdown
+                                            {% endif %}
+                                        </h2>
                                     </div>
                                     <div class="card__body">
                                         {% cache 30 questions_category_menu LANGUAGE_CODE %}
@@ -79,7 +117,13 @@
                             </div>
                         </div>
                     {% endif %}
+                <div class="col-lg-9 col-md-12">
+                        {% block index_content %}
+
+                        {% endblock %}
+                    </div>
                 </div>
+
             </div>
         </div>
     </main>

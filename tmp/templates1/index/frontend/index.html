@@ -1,0 +1,247 @@
+{% extends 'theme_frontend_base.html' %}
+{% load newinlib_tags %}
+{% load i18n %}
+{% load news_tags %}
+{% load participant_news_tags %}
+{% load participant_events_tags %}
+{% load events_tags %}
+{% load ssearch_tags %}
+{% load participiants_tags %}
+{% load cache %}
+{% get_current_language as LANGUAGE_CODE %}
+{% block content %}
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-12">
+                    <section class="search">
+                        <h1 class="search__title">
+                            {% if LANGUAGE_CODE == 'ru' %}
+                                В электронном каталоге вы сможете найти и забронировать книги в библиотеках Республики
+                                Татарстан
+                            {% elif LANGUAGE_CODE == 'tt' %}
+                                Электрон каталог һәм коллекцияләр буенча эзләү
+                            {% else %}
+                                Search in e-catalog and e-collections
+                            {% endif %}
+                        </h1>
+                        <form action="{% url 'ssearch:frontend:index' %}" method="get" role="search">
+                            <div class="search-input search-input_mw">
+                                <select name="attr" class="search-input__select">
+                                    <option value="text_t"
+                                            {% if request.GET.attr == 'text_t' or not request.GET.attr %}selected{% endif %}>
+                                        {% if LANGUAGE_CODE == 'ru' %}Везде{% elif LANGUAGE_CODE == 'tt' %}Һәр
+                                            урында{% else %}Anywhere{% endif %}
+                                    </option>
+                                    <option value="author_t" {% if request.GET.attr == 'author_t' %}selected{% endif %}>
+                                        {% if LANGUAGE_CODE == 'ru' %}Автор{% elif LANGUAGE_CODE == 'tt' %}
+                                            Автор{% else %}
+                                            Author{% endif %}
+                                    </option>
+                                    <option value="title_t" {% if request.GET.attr == 'title_t' %}selected{% endif %}>
+                                        {% if LANGUAGE_CODE == 'ru' %}Заглавие{% elif LANGUAGE_CODE == 'tt' %}
+                                            Исем{% else %}
+                                            Title{% endif %}
+                                    </option>
+                                    {% if catalog == 'ebooks' %}
+                                        <option value="full-text"
+                                                {% if request.GET.attr == 'full-text' %}selected{% endif %}>
+                                            Полный текст
+                                        </option>
+                                    {% endif %}
+                                    <option value="subject-heading_t"
+                                            {% if request.GET.attr == 'subject-heading_t' %}selected{% endif %}>
+                                        {% if LANGUAGE_CODE == 'ru' %}Тематика{% elif LANGUAGE_CODE == 'tt' %}
+                                            Темасы{% else %}
+                                            Subject{% endif %}
+                                    </option>
+                                    <option value="date-of-publication_s"
+                                            {% if request.GET.attr == 'date-of-publication_dt' %}selected{% endif %}>
+                                        {% if LANGUAGE_CODE == 'ru' %}Год
+                                            публикации{% elif LANGUAGE_CODE == 'tt' %}Бастырып чыгару
+                                            елы{% else %}Publication year{% endif %}
+                                    </option>
+                                    <option value="isbn_t" {% if request.GET.attr == 'isbn_t' %}selected{% endif %}>
+                                        ISBN
+                                    </option>
+                                    <option value="issn_t" {% if request.GET.attr == 'issn_t' %}selected{% endif %}>
+                                        ISSN
+                                    </option>
+                                </select>
+                                <input class="search-input__input" name="q" id="appendedInputButton" type="text"
+                                       placeholder="{% if LANGUAGE_CODE == 'tt' %}Авторны, китап исемен, теманы сайлагыз{% else %}Введите автора, заглавие, тему{% endif %}...">
+                                <button class="search-input__btn">
+                                    <i class="icon-search"
+                                       title="{% if LANGUAGE_CODE == 'ru' %}Поиск{% elif LANGUAGE_CODE == 'tt' %}Эзләү{% else %}Search{% endif %}"></i>
+                                </button>
+                            </div>
+                        </form>
+                        <a class="search-sub-link" href="https://kitap.tatar.ru">Поиск по публичным библиотекам<i
+                                class="icon-right-arrow"></i></a>
+                    </section>
+                </div>
+{#                <div class="col-lg-4 col-md-12 col_as-fe">#}
+{#                    <section class="card card_md-mt">#}
+{#                        <div class="card__header">#}
+{#                            <h2 class="card__title">#}
+{#                                {% if LANGUAGE_CODE == 'ru' %}#}
+{#                                    Задать вопрос библиотекарю#}
+{#                                {% elif LANGUAGE_CODE == 'tt' %}#}
+{#                                    Китапханәчегә сорау бирү#}
+{#                                {% else %}#}
+{#                                    Ask question#}
+{#                                {% endif %}#}
+{#                            </h2>#}
+{#                        </div>#}
+{#                        <div class="card__body">#}
+{#                            <p class="card__ask-lib-text">Ищете информацию? Подбираете литературу? Есть вопросы о работе#}
+{#                                библиотеки? Виртуальная справочная служба поможет!</p>#}
+{#                        </div>#}
+{#                        <div class="card__footer">#}
+{#                            <ul class="card-nav">#}
+{#                                <li class="card-nav__item">#}
+{#                                    <a class="card-nav__link" href="{% url 'ask_librarian:frontend:ask' %}">#}
+{#                                        {% if LANGUAGE_CODE == 'ru' %}#}
+{#                                            Задать вопрос#}
+{#                                        {% elif LANGUAGE_CODE == 'tt' %}#}
+{#                                            Китапханәчегә сорау#}
+{#                                        {% else %}#}
+{#                                            Ask question#}
+{#                                        {% endif %}#}
+{#                                    </a>#}
+{#                                </li>#}
+{#                                <li class="card-nav__item">#}
+{#                                    <a class="card-nav__link" href="{% url 'ask_librarian:frontend:index' %}">#}
+{#                                        {% if LANGUAGE_CODE == 'ru' %}#}
+{#                                            Все вопросы#}
+{#                                        {% elif LANGUAGE_CODE == 'tt' %}#}
+{#                                            Барлык сораулар#}
+{#                                        {% else %}#}
+{#                                            All questions#}
+{#                                        {% endif %}#}
+{#                                    </a>#}
+{#                                </li>#}
+{#                            </ul>#}
+{#                        </div>#}
+{#                    </section>#}
+{#                </div>#}
+            </div>
+            <section class="card news-main">
+                <h2 class="news-main__title">Мы обновляем дизайн, а также вносим другие изменения</h2>
+                <p class="news-main__description">Некоторое время могут возникать проблемы с входом в кабинет, но не грустите - мы постараемся как можно быстрее завершить работы.</p>
+{#                <a class="news-main__link" href="#">Подробнее о конкурсе</a>#}
+            </section>
+{#            <section class="card-transparent new-arrival-card">#}
+{#                <header class="card-transparent__header">#}
+{#                    <h2 class="card-transparent__title">#}
+{#                        {% if LANGUAGE_CODE == 'ru' %}#}
+{#                            Новые оцифрованные издания#}
+{#                        {% elif LANGUAGE_CODE == 'tt' %}#}
+{#                            Яңа цифрлаштырылган басмалар#}
+{#                        {% else %}#}
+{#                            New e-resources#}
+{#                        {% endif %}#}
+{#                    </h2>#}
+{#                    <a href="{% url 'newinlib:frontend:index' %}" class="card-transparent__link">#}
+{#                        {% if LANGUAGE_CODE == 'ru' %}Все оцифрованные издания#}
+{#                        {% elif LANGUAGE_CODE == 'tt' %}Соңгы кертелгән китаплар#}
+{#                        {% else %}More new arrivals#}
+{#                        {% endif %}#}
+{#                    </a>#}
+{#                </header>#}
+{#                {% cache 60 newinlib.html %}#}
+{#                    {% last_items_feed %}#}
+{#                {% endcache %}#}
+{#            </section>#}
+
+{#            <div class="row">#}
+{#                <div class="col-lg-6 col-md-12">#}
+{#                    <section class="card-transparent">#}
+{#                        <header class="card-transparent__header">#}
+{#                            <h2 class="card-transparent__title">#}
+{#                                {% if LANGUAGE_CODE == 'ru' %}#}
+{#                                    Новости#}
+{#                                {% elif LANGUAGE_CODE == 'tt' %}#}
+{#                                    Яңалыклар#}
+{#                                {% else %}#}
+{#                                    News#}
+{#                                {% endif %}#}
+{#                            </h2>#}
+{#                            <a class="card-transparent__link" href="{% url 'news:frontend:index' %}">#}
+{#                                {% if LANGUAGE_CODE == 'ru' %}#}
+{#                                    Архив новостей#}
+{#                                {% elif LANGUAGE_CODE == 'tt' %}#}
+{#                                    Яңалыклар архивы#}
+{#                                {% else %}#}
+{#                                    News archive#}
+{#                                {% endif %}#}
+{#                            </a>#}
+{#                        </header>#}
+{#                        {% news_feed %}#}
+{#                    </section>#}
+{#                </div>#}
+{#                <div class="col-lg-6 col-md-12">#}
+{#                    <section class="card-transparent">#}
+{#                        <header class="card-transparent__header">#}
+{#                            <h2 class="card-transparent__title">Афиша</h2>#}
+{#                            <a class="card-transparent__link" href="{% url 'events:frontend:index' %}">Все#}
+{#                                мероприятия</a>#}
+{#                        </header>#}
+{#                        {% cache 600 'participant_events_nearest' %}#}
+{#                            {% participant_events_nearest 0 10 %}#}
+{#                        {% endcache %}#}
+{#                    </section>#}
+{#                </div>#}
+{#            </div>#}
+
+            <section class="card-transparent">
+                <header class="card-transparent__header">
+                    <h2 class="card-transparent__title">Карта библиотек</h2>
+                    <a class="card-transparent__link" href="{% url 'participants:frontend:index' %}">Все библиотеки</a>
+                </header>
+                <style>
+                    .abc-crumbs__list__hover-box {
+                        display: none;
+                        position: fixed;
+                        height: auto;
+                        width: 300px;
+                        border-radius: 5px;
+                        font-weight: 400;
+                        line-height: 26px;
+                        text-align: left;
+                    }
+
+                    .abc-crumbs__list__hover-box_show {
+                        display: block;
+                    }
+
+                    .abc-crumbs__list__hover-box, .tt-dropdown-menu {
+                        z-index: 2;
+                        background-color: #fff;
+                        box-shadow: 0 19px 38px rgba(0, 0, 0, .3), 0 15px 12px rgba(0, 0, 0, .22);
+                    }
+                </style>
+                <div id="lib-finder">
+                    <div class="lds-roller-wrap-center">
+                        <div class="lds-roller">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+{% endblock %}
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        System.import('index/index.js');
+    </script>
+{% endblock %}

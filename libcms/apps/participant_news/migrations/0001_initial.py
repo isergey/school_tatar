@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=512, verbose_name='\u0417\u0430\u0433\u043b\u0430\u0432\u0438\u0435')),
                 ('teaser', models.CharField(help_text='\u041a\u0440\u0430\u0442\u043a\u043e\u0435 \u043e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u043d\u043e\u0432\u043e\u0441\u0442\u0438', max_length=512, verbose_name='\u0422\u0438\u0437\u0435\u0440')),
                 ('content', models.TextField(verbose_name='\u0421\u043e\u0434\u0435\u0440\u0436\u0430\u043d\u0438\u0435 \u043d\u043e\u0432\u043e\u0441\u0442\u0438')),
-                ('library', models.ForeignKey(to='participants.Library')),
+                ('library', models.ForeignKey(related_name='participants_library', to='participants.Library')),
             ],
             options={
                 'ordering': ['order', '-create_date'],

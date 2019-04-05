@@ -1,9 +1,8 @@
 {% extends 'theme_frontend_base.html' %}
 {% load i18n %}
 {% get_current_language as LANGUAGE_CODE %}
-{% block title %}Библиотеки{% endblock %}
+{% block title %}{{ library.name }} /{% if library.parent_id %} {{ library.parent.name }} /{% endif %} Библиотеки{% endblock %}
 {% block content %}
-
     <main>
         <div class="container">
             <nav class="crumb">
@@ -77,23 +76,22 @@
                                         {% for library in  libraries %}
                                             <div class="list__item">
                                                 <div class="list__col-text">
-                                                    {% if not library.is_leaf_node %}
-                                                        {% url 'participants:frontend:branches' library.code as participant_site_url %}
-                                                    {% else %}
-                                                        {% url 'participants:frontend:detail' library.code as participant_site_url %}
-                                                    {% endif %}
+                                                    {% url 'participant_site:frontend:index' library.code as participant_site_url %}
                                                     <h3 class="list__title">
-
-                                                        {% if not library.is_leaf_node %}
-                                                            <a class="list__title-link"
-                                                               href="{{ participant_site_url }}">{{ library.name }}</a>
-                                                        {% else %}
-                                                            <span>{{ library.name }}</span>
-                                                        {% endif %}
+                                                        <a class="list__title-link"
+                                                           href="{{ participant_site_url }}">{{ library.name }}</a>
                                                     </h3>
-{#                                                    <a class="list__link"#}
-{#                                                       href="{% url 'ssearch:frontend:index' %}?library={{ library.code }}"#}
-{#                                                       target="_blank">Поиск в каталоге</a>#}
+                                                    <a class="list__link"
+                                                       href="{% url 'ssearch:frontend:index' %}?library={{ library.code }}"
+                                                       target="_blank">
+                                                        {% if LANGUAGE_CODE == 'ru' %}
+                                                            Поиск в каталоге
+                                                        {% elif LANGUAGE_CODE == 'tt' %}
+                                                            Эзләү каталоге
+                                                        {% else %}
+                                                            Search in catalog
+                                                        {% endif %}
+                                                    </a>
                                                 </div>
                                             </div>
                                         {% empty %}

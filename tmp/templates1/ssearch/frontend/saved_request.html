@@ -1,0 +1,103 @@
+{% extends 'theme_frontend_base.html' %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% load hash %}
+{% load ssearch_tags %}
+{% load order_tags %}
+{% load mydocs_tags %}
+{% block title %}Сохраненные поисковые запросы{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            <nav class="crumb">
+                <ol class="crumb__list">
+                    <li>
+                        <a href="{% url 'index:frontend:index' %}">
+                            {% if LANGUAGE_CODE == 'ru' %}
+                                Главная
+                            {% elif LANGUAGE_CODE == 'tt' %}
+                                Төп бит
+                            {% else %}
+                                Home
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'personal:frontend:index' %}">
+                            Личный кабинет
+                        </a>
+                    </li>
+                    <li>
+                    <span class="crumb__current">
+                        Сохраненные поисковые запросы
+                    </span>
+                    </li>
+                </ol>
+            </nav>
+            <div class="content">
+                <h1 class="content__title">Сохраненные поисковые запросы</h1>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="list list_mt">
+                        {% for srequest in srequests %}
+                            <div class="list__item">
+                                <div class="list__col-text">
+                                    <h3 class="list__title">
+                                        <a class="list__title-link" href="{% url 'ssearch:frontend:index' %}?
+
+
+                                                {{ srequest.breads|last|hash:"href" }}{% if srequest.catalog %}&catalog={{ srequest.catalog|urlencode }}{% endif %}">
+                                            {% for search_breadcumb in srequest.breads %}
+                                                {% if not forloop.last %}
+                                                    <span>{{ search_breadcumb.attr|facet_title }}: {{ search_breadcumb.value|lower|capfirst }}</span>
+                                                    →
+                                                {% else %}
+                                                    {#                <li><a href="{% add_get_append q=value.0 attr='content-type' %}">{{ value.0|content_type_title }}</a> (<b>{{ value.1 }}</b>)</li>#}
+                                                    {% if search_breadcumb.attr == 'content-type' %}
+                                                        <span>{{ search_breadcumb.attr|facet_title }}: {{ search_breadcumb.value|content_type_title }}</span>
+                                                    {% elif search_breadcumb.attr == 'code-language' %}
+                                                        <span>{{ search_breadcumb.attr|facet_title }}: {{ search_breadcumb.value|language_title }}</span>
+                                                    {% else %}
+                                                        <span>{{ search_breadcumb.attr|facet_title }}: {{ search_breadcumb.value|lower|capfirst }}</span>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </a>
+                                    </h3>
+                                    <p class="list__description">{{ srequest.saved_request.add_time }}</p>
+                                    <a class="list__link delete"
+                                       href="{% url 'ssearch:frontend:delete_search_request' srequest.saved_request.id %}">Удалить</a>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <div class="alert alert-info">Список сохраненных запросов пуст.</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript">
+        $('.delete').click(function () {
+            var button = $(this);
+            $.ajax({
+                url: $(this).attr('href'),
+                type: 'GET',
+                dataType: "json",
+                async: true,
+                success: function (response) {
+                    if (response['status'] == 'ok') {
+                        button.parent().parent().hide();
+                    }
+                    else {
+                        alert('При удалении возникла ошибка');
+                    }
+                }
+            });
+            return false;
+        });
+    </script>
+{% endblock %}

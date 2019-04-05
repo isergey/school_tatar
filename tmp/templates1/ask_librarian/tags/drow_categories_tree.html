@@ -1,0 +1,23 @@
+{% load mptt_tags %}
+{% load ask_librarian_tags %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% url 'ask_librarian:frontend:index' as ask_librarian_index %}
+<ul class="card-list">
+    {% if nodes %}
+        {% recursetree nodes %}
+            <li class="card-list__item {% if path == node.item_title.url %}card-list__item_active{% endif %}">
+                <a class="card-list__link" href="{{ ask_librarian_index }}?category={{ node.id }}">
+                    <span class="card-list__title">{{ node.node_title.title }}</span>
+                </a>
+                {% if not node.is_leaf_node %}
+                    <li>
+                        <ul>
+                            {{ children }}
+                        </ul>
+                    </li>
+                {% endif %}
+            </li>
+        {% endrecursetree %}
+    {% endif %}
+</ul>

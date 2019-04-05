@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
     <meta name="format-detection" content="telephone=no">
     <meta name="theme-color" content="#4270ba">
+    <meta name="yandex-verification" content="b78ca1c6c877e57d"/>
 
     <title>{% block title %}Национальная электронная библиотека Республики Татарстан{% endblock %}</title>
 
@@ -16,157 +17,163 @@
     <meta name="keywords" content>
 
     <link rel="icon" type="image/ico" href="{{ STATIC_URL }}theme/favicon.ico"/>
-    <link rel="stylesheet" href="{{ STATIC_URL }}dist/styles/index.css?123456">
-    {#    <script src="{{ STATIC_URL }}js/jquery.min.js"></script>#}
-    {#    <script src="{{ STATIC_URL }}dist/vendors/bootstrap/bootstrap.min.js"></script>#}
-    {#    <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>#}
-
-    {#    <script src="{{ STATIC_URL }}dist/vendors/owl-carousel/owl.carousel.min.js"></script>#}
-    {#    <script src="{{ STATIC_URL }}js/lodash.compat.min.js"></script>#}
-    {#    <script src="{{ STATIC_URL }}js/browser-polyfill.min.js"></script>#}
-    {#    <script src="{{ STATIC_URL }}js/browser.min.js"></script>#}
-    {#    <script src="{{ STATIC_URL }}js/system.js"></script>#}
-    {#    <script src="//api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>#}
-    {#    <script>#}
-    {#        System.config({#}
-    {#            map: {#}
-    {#                eventemitter3: '{{ STATIC_URL }}js/eventemitter3.js',#}
-    {#                jquery: '{{ STATIC_URL }}js/jquery.min.js',#}
-    {#                lodash: '{{ STATIC_URL }}js/lodash.compat.min.js',#}
-    {#                'owl-carousel': '{{ STATIC_URL }}dist/vendors/owl-carousel/owl.carousel.min.js',#}
-    {#                react: '{{ STATIC_URL }}js/react-with-addons.min.js',#}
-    {#                typehead: '{{ STATIC_URL }}js/typeahead.jquery.min.js',#}
-    {#            },#}
-    {#            baseURL: '{{ STATIC_URL }}apps',#}
-    {#            transpiler: 'babel'#}
-    {#        });#}
-    {#        System.import('base.js');#}
-    {#        // loads /app/main.js#}
-    {##}
-    {#    </script>#}
-    {#    {% block scripts %}{% endblock %}#}
-
+    <link rel="stylesheet" href="{{ STATIC_URL }}dist/styles/index.css?erw34rw34r333">
+    <script>
+        window.CURRENT_LANGUAGE = '{{ LANGUAGE_CODE }}';
+    </script>
 </head>
 <body>
 <div class="content-wrap">
-    {% if request.path_info != '/' %}
-        <div class="header-wrap-bg">{% endif %}
-    <div class="container">
-        <header class="header">
-            <button class="header__nav-btn">
-                <i title="Открыть меню" class="icon-menu"></i>
-            </button>
-            <a class="logo header__logo" href="{% url 'index:frontend:index' %}" title="На главную!">
-                <div class="logo__img-wrap">
-                    <img class="logo__img" src="{{ STATIC_URL }}dist/images/logo/logo.png"
-                         alt="
-                            {% if LANGUAGE_CODE == 'ru' %}
-                                Национальная электронная библиотека Республики Татарстан
-                                Школьные библиотеки
-                            {% elif LANGUAGE_CODE == 'tt' %}
-                                Татарстан Республикасының Милли
-                                электрон китапханәсе
-                            {% else %}
-                                National Electronic Library of the
-                                Republic of Tatarstan
-                            {% endif %}
-                        ">
-                </div>
-                <div class="logo__text">
-                    {% if LANGUAGE_CODE == 'ru' %}
-                        <span>Национальная электронная библиотека РТ</span>
-                        <span>Школьные библиотеки</span>
-                    {% elif LANGUAGE_CODE == 'tt' %}
-                        <span>Татарстан Республикасының Милли</span>
-                        <span>Мәктәп китапханәләре</span>
-                    {% else %}
-                        <span>National Electronic Library of the Republic of Tatarstan</span>
-                        <span>School libraries</span>
-                    {% endif %}
-                </div>
-                <div class="logo__text-sm">
-                    {% if LANGUAGE_CODE == 'ru' %}
-                        НЭБ РТ
-                    {% elif LANGUAGE_CODE == 'tt' %}
-                        ТРМ ЭК
-                    {% else %}
-                        NEL RT
-                    {% endif %}
-                </div>
-            </a>
-            <ul class="nav nav_tool header__tool">
-                <li class="nav__item {% if "/ru" in request.path %}nav__item_active{% endif %}">
-                    <a href="/ru{{ request.path|rmlocale }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}"
-                    class="nav__link"
-                    title="Русский">Рус</a>
-                </li>
-                <li class="nav__item {% if "/tt" in request.path %}nav__item_active{% endif %}">
-                    <a href="/tt{{ request.path|rmlocale }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}"
-                    class="nav__link"
-                    title="Татарский">Тат</a>
-                </li>
-                <li class="nav__item {% if "/en" in request.path %}nav__item_active{% endif %}">
-                    <a href="/en{{ request.path|rmlocale }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}"
-                    class="nav__link"
-                    title="English">Eng</a>
-                </li>
-                <li class="nav__item">
-                    <a class="nav__link bvi-panel-open" href="#"><i class="icon-eye"
-                                                                    title="Версия для слабовидящих"></i></a>
-                </li>
-            </ul>
-            {% include 'cabinet.html' %}
-        </header>
-        <nav class="nav-wrap">
-            <ul class="nav nav_tool">
-                <li class="nav__item {% if "/ru" in request.path %}nav__item_active{% endif %}">
-                    <a href="/ru
 
-                            {{ request.path|rmlocale }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}"
-                       class="nav__link"
-                       title="Русский">Рус</a>
-                </li>
-                <li class="nav__item {% if "/tt" in request.path %}nav__item_active{% endif %}">
-                    <a href="/tt
-
-                            {{ request.path|rmlocale }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}"
-                       class="nav__link"
-                       title="Татарский">Тат</a>
-                </li>
-                <li class="nav__item {% if "/en" in request.path %}nav__item_active{% endif %}">
-                    <a href="/en
-
-                            {{ request.path|rmlocale }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}"
-                       class="nav__link"
-                       title="English">Eng</a>
-                </li>
-            </ul>
-            {% include 'cabinet-mobile.html' %}
-            {% include 'main_menu.html' %}
-        </nav>
+    {#    {% if request.path_info != '/' %}{% endif %}#}
+    <div class="header-border
+        {% if request.path_info != '/' %}
+            header-border_1
+        {% endif %}
+{#        {% if 'pages' in request.build_absolute_uri %}#}
+{#            header-border_2#}
+{#        {% elif 'participants' in request.build_absolute_uri %}#}
+{#            header-border_1#}
+{#        {% elif 'ssearch' in request.build_absolute_uri %}#}
+{#            header-border_2#}
+{#        {% elif 'guestbook' in request.build_absolute_uri %}#}
+{#            header-border_2#}
+{#        {% elif 'news' in request.build_absolute_uri %}#}
+{#            header-border_3#}
+{#        {% elif 'ask_librarian' in request.build_absolute_uri %}#}
+{#            header-border_2#}
+{#        {% elif 'school' in request.build_absolute_uri %}#}
+{#            header-border_4#}
+{#        {% elif 'events' in request.build_absolute_uri %}#}
+{#            header-border_1#}
+{#        {% elif 'site' in request.build_absolute_uri %}#}
+{#            header-border_3#}
+{#        {% elif 'accounts' in request.build_absolute_uri %}#}
+{#            header-border_4#}
+{#        {% elif 'personal' in request.build_absolute_uri %}#}
+{#            header-border_4#}
+{#        {% endif %}#}
+    ">
+        <div class="container">
+            <header class="header">
+                <button class="header__nav-btn">
+                    <i title="Открыть меню" class="icon-menu"></i>
+                </button>
+                <a class="logo header__logo" href="{% url 'index:frontend:index' %}" title="На главную!">
+                    <div class="logo__text">
+                        {% if LANGUAGE_CODE == 'ru' %}
+                            <span>Национальная электронная библиотека</span>
+                            <span>Республики Татарстан</span>
+                        {% elif LANGUAGE_CODE == 'tt' %}
+                            <span>Татарстан Республикасының Милли</span>
+                            <span>электрон китапханәсе</span>
+                        {% else %}
+                            <span>National Electronic Library of the</span>
+                            <span>Republic of Tatarstan</span>
+                        {% endif %}
+                    </div>
+                    <div class="logo__text-sm">
+                        {% if LANGUAGE_CODE == 'ru' %}
+                            НЭБ РТ
+                        {% elif LANGUAGE_CODE == 'tt' %}
+                            ТРМ ЭК
+                        {% else %}
+                            NEL RT
+                        {% endif %}
+                    </div>
+                </a>
+                <ul class="nav nav_tool header__tool">
+                    <li class="nav__item {% if "/ru" in request.path %}nav__item_active{% endif %}">
+{#                        <a href="/ru"#}
+{#                           class="nav__link"#}
+{#                           title="Русский">Рус</a>#}
+                            <a href="/ru{{ request.path|rmlocale }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}"
+                            class="nav__link"
+                            title="Русский">Рус</a>
+                    </li>
+                    <li class="nav__item {% if "/tt" in request.path %}nav__item_active{% endif %}">
+{#                        <a href="/tt"#}
+{#                           class="nav__link"#}
+{#                           title="Татарский">Тат</a>#}
+                        <a href="/tt{{ request.path|rmlocale }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}"
+                        class="nav__link"
+                        title="Татарский">Тат</a>
+                    </li>
+                    <li class="nav__item {% if "/en" in request.path %}nav__item_active{% endif %}">
+{#                        <a href="/en"#}
+{#                           class="nav__link"#}
+{#                           title="English">Eng</a>#}
+                        <a href="/en{{ request.path|rmlocale }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}"
+                        class="nav__link"
+                        title="English">Eng</a>
+                    </li>
+                    <li class="nav__item">
+                        <a class="nav__link bvi-panel-open" href="#">
+                            <i class="icon-eye" title="Версия для слабовидящих"></i>
+                        </a>
+                    </li>
+                </ul>
+                {% include 'cabinet.html' %}
+            </header>
+            <nav class="nav-wrap">
+                <ul class="nav nav_tool">
+                    <li class="nav__item {% if "/ru" in request.path %}nav__item_active{% endif %}">
+                        <a href="/ru{{ request.path|rmlocale }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}"
+                           class="nav__link"
+                           title="Русский">Рус</a>
+                    </li>
+                    <li class="nav__item {% if "/tt" in request.path %}nav__item_active{% endif %}">
+                        <a href="/tt{{ request.path|rmlocale }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}"
+                           class="nav__link"
+                           title="Татарский">Тат</a>
+                    </li>
+                    <li class="nav__item {% if "/en" in request.path %}nav__item_active{% endif %}">
+                        <a href="/en{{ request.path|rmlocale }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}"
+                           class="nav__link"
+                           title="English">Eng</a>
+                    </li>
+                </ul>
+                {% include 'cabinet-mobile.html' %}
+                {% include 'main_menu.html' %}
+            </nav>
+        </div>
     </div>
     {% if request.path_info != '/' %}</div>{% endif %}
-    {% block content %}{% endblock %}
-    <footer class="footer" role="contentinfo">
-        <div class="container">
-            {% include 'main_menu_footer.html' %}
-            <ul class="footer-nav">
-                <li class="footer-nav__item">
-                    <a class="footer-nav__link" href="{% url 'index:frontend:index' %}" title="На главную!">Национальная
-                        электронная библиотека Республики Татарстан</a>
-                </li>
-                <li class="footer-nav__item">
-                    <a class="footer-nav__link" href="http://mic.tatarstan.ru/" target="_blank"
-                       rel="nofollow, noopener">Министерство информатизации и связи Республики Татарстан</a>
-                </li>
-            </ul>
-        </div>
-    </footer>
+{% block content %}{% endblock %}
+<footer class="footer" role="contentinfo">
+    <div class="container">
+        {% include 'main_menu_footer.html' %}
+        <ul class="footer-nav">
+            <li class="footer-nav__item">
+                <a class="footer-nav__link" href="{% url 'index:frontend:index' %}" title="На главную!">
+                    {% if LANGUAGE_CODE == 'ru' %}
+                        <span>Национальная электронная библиотека</span>
+                        <span>Республики Татарстан</span>
+                    {% elif LANGUAGE_CODE == 'tt' %}
+                        <span>Татарстан Республикасының Милли</span>
+                        <span>электрон китапханәсе</span>
+                    {% else %}
+                        <span>National Electronic Library of the</span>
+                        <span>Republic of Tatarstan</span>
+                    {% endif %}
+                </a>
+            </li>
+            <li class="footer-nav__item">
+                <a class="footer-nav__link" href="http://mic.tatarstan.ru/" target="_blank"
+                   rel="nofollow, noopener">
+                    {% if LANGUAGE_CODE == 'ru' %}
+                        Министерство информатизации и связи Республики Татарстан
+                    {% elif LANGUAGE_CODE == 'tt' %}
+                        Татарстан Республикасы мәгълүматлаштыру һәм элемтә министрлыгы
+                    {% else %}
+                        Ministry of Informatization and Communication of the Republic of Tatarstan
+                    {% endif %}
 
-    {% if request.path_info == '/' %}
-        <div class="bg"></div>
-    {% endif %}
-
+                </a>
+            </li>
+        </ul>
+    </div>
+</footer>
 </div>
 
 <div class="nav-mask"></div>
@@ -177,7 +184,7 @@
 <script src="{{ STATIC_URL }}dist/vendors/jquery-2.2.4.min.js?1234"></script>
 <script src="{{ STATIC_URL }}dist/vendors/swiper/js/swiper.min.js?1234"></script>
 <script src="{{ STATIC_URL }}dist/vendors/micromodal/micromodal.min.js?1234"></script>
-<script src="{{ STATIC_URL }}dist/js/main.js?1234"></script>
+<script src="{{ STATIC_URL }}dist/js/main.js?12345222"></script>
 <script src="{{ STATIC_URL }}dist/vendors/visually/button-visually-impaired/js/responsivevoice.min.js?ver=1.5.0?1234"></script>
 <script src="{{ STATIC_URL }}dist/js/bvi-init-panel.js?1234"></script>
 <script src="{{ STATIC_URL }}dist/js/bvi.js?1234"></script>
@@ -306,6 +313,19 @@
 </script>
 <noscript><p><img src="//ua.tatar.ru/piwik.php?idsite=22" style="border:0;" alt=""/></p></noscript>
 <!-- End Piwik Code -->
+
+{#<script>#}
+{#var $buoop = {required:{e:-4,f:-3,o:-3,s:-1,c:-3},insecure:true,unsupported:true,style:"bottom",api:2018.12 };#}
+{#function $buo_f(){#}
+{# var e = document.createElement("script");#}
+{# e.src = "//browser-update.org/update.min.js";#}
+{# document.body.appendChild(e);#}
+{# } #}
+{#try {document.addEventListener("DOMContentLoaded", $buo_f,false)}#}
+{#catch(e){window.attachEvent("onload", $buo_f)}#}
+{#</script>#}
+
+
 </body>
 </html>
 <!-- app mac1 {{ request.session.ap_mac }} -->

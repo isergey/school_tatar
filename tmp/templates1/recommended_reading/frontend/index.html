@@ -1,0 +1,86 @@
+{% extends 'theme_frontend_base.html' %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% load pagination_tag %}
+{% block title %}{{ content.title }}{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            <nav class="crumb">
+                <ol class="crumb__list">
+                    <li>
+                        <a href="{% url 'index:frontend:index' %}">
+                            {% if LANGUAGE_CODE == 'ru' %}
+                                Главная
+                            {% elif LANGUAGE_CODE == 'tt' %}
+                                Төп бит
+                            {% else %}
+                                Home
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li>
+                    <span class="crumb__current">
+                        {{ current_section.1 }}
+                    </span>
+                    </li>
+                </ol>
+            </nav>
+            <div class="row">
+                <div class="col-lg-9 col-md-12">
+                    <div class="content">
+                        <h1 class="content__title">{{ current_section.1 }}</h1>
+                        {% if current_section.0 == 'school' %}
+                            <div class="search-nav">
+                                <div class="search-nav__item">
+                                    <span class="search-nav__title">Для классов:</span>
+                                </div>
+                                {% url 'recommended_reading:frontend:index' as index_url %}
+                                {% for school_class in school_classes %}
+                                    <div class="search-nav__item">
+                                        {% if school_class.0|slugify == request.GET.school_class %}
+                                            <span class="search-nav__text">{{ school_class.1 }}</span>
+                                        {% else %}
+                                            <a class="search-nav__link"
+                                               href="{{ index_url }}?school_class={{ school_class.0|urlencode }}">{{ school_class.1 }}
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="list list_mt">
+                        {% for item in items_page.object_list %}
+                            <div class="list__item">
+                                <div class="list__col-text">
+                                    <h3 class="list__title">
+                                        <a class="list__title-link"
+                                           href="{% url 'recommended_reading:frontend:detail' item.id %}?back={{ request.get_full_path|urlencode }}">
+                                            {{ item.title }}
+                                        </a>
+                                    </h3>
+                                    {% include 'recommended_reading/frontend/item_attrs.html' with item=item %}
+                                </div>
+                                <div class="list__col-img">
+                                    <div class="list__img-wrap">
+                                        {% if item.cover %}
+                                            <img class="list__img"
+                                                 src="{{ MEDIA_URL }}{{ item.cover }}"
+                                                 alt="{{ item.title }}">
+                                        {% else %}
+                                            <img class="list__img"
+                                                 src="{{ STATIC_URL }}dist/images/list/file.svg"
+                                                 alt="{{ item.title }}">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% admin_pagination items_page %}
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

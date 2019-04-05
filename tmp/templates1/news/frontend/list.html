@@ -1,0 +1,86 @@
+{% extends 'theme_frontend_base.html' %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% load news_tags %}
+{% load pagination_tag %}
+{% block title %}
+    {% if LANGUAGE_CODE == 'ru' %}
+        Новости
+    {% elif LANGUAGE_CODE == 'tt' %}
+        Яңалыклар
+    {% else %}
+        News
+    {% endif %}
+{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            <nav class="crumb">
+                <ol class="crumb__list">
+                    <li>
+                        <a href="{% url 'index:frontend:index' %}">
+                            {% if LANGUAGE_CODE == 'ru' %}
+                                Главная
+                            {% elif LANGUAGE_CODE == 'tt' %}
+                                Төп бит
+                            {% else %}
+                                Home
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li>
+                        <span class="crumb__current">
+                            {% if LANGUAGE_CODE == 'ru' %}
+                                Новости
+                            {% elif LANGUAGE_CODE == 'tt' %}
+                                Яңалыклар
+                            {% else %}
+                                News
+                            {% endif %}
+                        </span>
+                    </li>
+                </ol>
+            </nav>
+            <div class="content">
+                <h1 class="content__title">
+                    {% if LANGUAGE_CODE == 'ru' %}
+                        Новости
+                    {% elif LANGUAGE_CODE == 'tt' %}
+                        Яңалыклар
+                    {% else %}
+                        News
+                    {% endif %}
+                </h1>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-7 col-md-12">
+                    <div class="news-list">
+                        {% for news in news_list %}
+                            <article class="news-list__item news-list__item_mb-big">
+                                <time class="news-list__date">{{ news.create_date }}</time>
+                                <h3 class="news-list__title">
+                                    <a class="news-list__link" href="{% url 'news:frontend:show' news.id %}">
+                                        {{ news.news_content.title }}
+                                    </a>
+                                </h3>
+                                <p class="news-list__description">{{ news.news_content.teaser }}</p>
+                            </article>
+                        {% endfor %}
+                    </div>
+                    {% admin_pagination news_page %}
+                </div>
+                <div class="col-lg-5 col-md-12">
+                    <section class="card">
+                        <header class="card__header">
+                            <h2 class="card__title">Архив новостей</h2>
+                        </header>
+                        <div class="card__body">
+                            {% news_calendar %}
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

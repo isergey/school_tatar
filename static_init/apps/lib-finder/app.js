@@ -5,6 +5,72 @@ import 'typehead';
 import utils from './utils.js';
 import EventEmitter from 'eventemitter3';
 
+var translates = {
+    'Для определения вашего местоположения необходимо дать разрешение в вашем бразузере': {
+        'en': 'To determine your location you need to give permission in your browser',
+        'tt': 'Билгеләү өчен Сезнең җир бирергә кирәк рөхсәт сезнең бразузере'
+    },
+    'Загрузка...': {
+        'en': 'Loading...',
+        'tt': 'Зинһар көтегез...',
+    },
+    'Ошибка': {
+        'en': 'Error',
+        'tt': 'Хата',
+    },
+    'Расстояние до Вас': {
+        'en': 'Distance to you',
+        'tt': 'Ераклык сезгә кадәр',
+    },
+    'Расстояние': {
+        'en': 'Distance',
+        'tt': 'Ераклык',
+    },
+    'Ничего не найдено': {
+        'en': 'Nothing found',
+        'tt': 'Бернәрсә дә табылмаган',
+    },
+    'Мое местоположение': {
+        'en': 'My location',
+        'tt': 'Минем җир',
+    },
+    'Ближайшие библиотеки': {
+        'en': 'Nearest libraries',
+        'tt': 'Якындагы китапханәләр',
+    },
+    'Введите адрес для поиска ближайшей библиотеки': {
+        'en': 'Enter address to find a library nearby',
+        'tt': 'Языгыз адрес эзләү өчен якындагы китапханә',
+    },
+    'подробнее': {
+        'en': 'details',
+        'tt': 'җентекле',
+    },
+    'Ваше местоположение': {
+        'en': 'Your location',
+        'tt': 'Сезнең җир'
+    },
+    'Искомый адрес': {
+        'en': 'Search address',
+        'tt': 'Телсез адрес',
+    },
+    'Алфавитный указатель муниципальных районов': {
+        'en': 'Alphabetical index of municipalities',
+        'tt': 'Муниципаль районнарның алфавит күрсәткече',
+    },
+    'Выберите букву района или нажмите на гео точку для поиска ближайших библиотек': {
+        'en': 'Search region by the first letter or Press geotag to find a library near you',
+        'tt': 'Сайлагыз хәрефе район яки басыгыз гео ноктасы эзләү өчен якындагы китапханәләр',
+    }
+
+};
+
+function translate(message) {
+    return (translates[message] || {})[window.CURRENT_LANGUAGE] || message;
+}
+
+
+
 let searchId = 0;
 
 const POSITION_TYPES = {
@@ -71,11 +137,12 @@ eventEmitter.on(EVENTS.GEO_DETECTION, () => {
             });
         });
     }).catch(() => {
-        alert('Для определения вашего местоположения необходимо дать разрешение в вашем бразузере');
+        alert(translate('Для определения вашего местоположения необходимо дать разрешение в вашем бразузере'));
     });
 });
 
-function renderLoader(message = 'Загрузка...') {
+
+function renderLoader(message = translate('Загрузка...')) {
     return (
         <div className="lds-roller-wrap-center">
             <div className="lds-roller">
@@ -92,7 +159,7 @@ function renderLoader(message = 'Загрузка...') {
     );
 }
 
-function renderError(message = 'Ошибка') {
+function renderError(message = translate('Ошибка')) {
     return <span>{message}</span>;
 }
 
@@ -196,9 +263,9 @@ const ContextMenu = React.createClass({
         document.removeEventListener('touchend', this._checkClickAway);
     },
     render() {
-        const classes = ['abc-crumbs__list__hover-box'];
+        const classes = ['map-nav-dropdown-wrap'];
         if (this.state.open) {
-            classes.push('abc-crumbs__list__hover-box_show');
+            classes.push('map-nav-dropdown-wrap_show');
         }
         const style = {};
         if (this.state.left !== 0 || this.state.top !== 0) {
@@ -207,6 +274,9 @@ const ContextMenu = React.createClass({
         }
         return (
             <div className={classes.join(' ')} style={style}>
+                <button className="map-nav-dropdown-btn" onClick={this.close}>
+                    Закрыть
+                </button>
                 {this.props.children}
             </div>
         );
@@ -226,8 +296,8 @@ const MapBoxItem = React.createClass({
             return null;
         }
         return (
-            <span title="Расстояние до Вас">
-        {` (Расстояние: ${utils.humanizeDistance(this.props.distance)})`}
+            <span title={translate('Расстояние до Вас')}>
+        {` (${translate('Расстояние')}: ${utils.humanizeDistance(this.props.distance)})`}
       </span>
         );
     },
@@ -302,11 +372,12 @@ const MapBoxItems = React.createClass({
         );
     },
     renderNotFound() {
-        return <div>Ничего не найдено</div>;
+        return <div>translate(Ничего не найдено)</div>;
     },
     renderNotInited() {
-        return <div className="help-text">Укажите букву района или нажмите на стрелку для поиска ближайших
-            библиотек</div>;
+        // return <div className="help-text">Укажите букву района или нажмите на стрелку для поиска ближайших
+        //     библиотек</div>;
+        return null;
     },
     render() {
         let content = null;
@@ -316,12 +387,14 @@ const MapBoxItems = React.createClass({
         } else if (!this.state.loaded) {
             content = renderLoader();
         } else if (!this.state.inited) {
-            content = this.renderNotInited();
+            return null;
+            // content = this.renderNotInited();
         } else if (!this.state.items.length) {
             content = this.renderNotFound();
         } else {
             content = this.renderItems();
         }
+
         return (
             <div key={searchId} className="map-nav-result-box">
                 {content}
@@ -362,18 +435,18 @@ const AbcCrumbLetter = React.createClass({
     renderContextMenu() {
         const districts = (this.props.letter.districts || []).map((district, index) => {
             return (
-                <div key={district.id || index} className="map-box__list-bib__item">
+                <li key={district.id || index} className="map-nav-dropdown-menu__item">
                     <a onClick={this.handleDistrictClick.bind(this, district.id)}
-                       className="map-box__list-bib__item__link" href="#1"
+                       className="map-nav-dropdown-menu__link" href="#1"
                     >{district.name}</a>
-                </div>
+                </li>
             );
         });
         return (
             <ContextMenu ref="contextMenu">
-                <div className="map-box__list-bib">
+                <ul className="map-nav-dropdown-menu">
                     {districts}
-                </div>
+                </ul>
             </ContextMenu>
         );
     },
@@ -394,7 +467,7 @@ const AbcCrumbArrow = React.createClass({
     render() {
         return (
             <li onClick={this.props.onClick}>
-        <span title="Мое местоположение" href="#" className="abc-crumbs__list_link-img">
+        <span title={translate('Мое местоположение')} href="#" className="abc-crumbs__list_link-img">
             <img src="/static/dist/images/geo_plain.svg"/>
         </span>
             </li>
@@ -524,13 +597,13 @@ const AddrSearch = React.createClass({
             <div className="map-nav-search">
                 <div className="map-nav-search__geo-col">
                     <button className="map-nav__geo-btn" onClick={this.handleArrowClick}>
-                        <i className="icon-locating" title="Ближайшие библиотеки"></i>
+                        <i className="icon-locating" title={translate('Ближайшие библиотеки')}></i>
                     </button>
                 </div>
                 <div className="map-nav-search__search-col">
                     <div className="map-nav-search-input">
                         <input ref="input" className="map-nav-search-input__input"
-                               placeholder="Введите адрес для поиска ближайшей библиотеки"/>
+                               placeholder={translate('Введите адрес для поиска ближайшей библиотеки')}/>
                         <button className="map-nav-search-input__btn">
                             <i className="icon-search" title="Поиск"></i>
                         </button>
@@ -592,8 +665,8 @@ const LibFinder = React.createClass({
                 return;
             }
             clusterer.add(new window.ymaps.Placemark([library.latitude, library.longitude], {
-                hintContent: `${library.name || ''} <a target="_blank" href="${item.href}">подробнее</a>`,
-                balloonContent: `${library.name || ''} <a target="_blank" href="${item.href}">подробнее</a>`,
+                hintContent: `${library.name || ''} <a target="_blank" href="${item.href}">${translate('подробнее')}</a>`,
+                balloonContent: `${library.name || ''} <a target="_blank" href="${item.href}">${translate('подробнее')}</a>`,
             }));
         });
         this.itemsMap.geoObjects.add(clusterer);
@@ -601,9 +674,9 @@ const LibFinder = React.createClass({
         this.itemsMap.setZoom(this.itemsMap.getZoom() - 1);
     },
     drowUserPosition(position = {}) {
-        let content = 'Ваше местоположение';
+        let content = translate('Ваше местоположение');
         if (position.type === POSITION_TYPES.ADDRESS) {
-            content = 'Искомый адрес';
+            content = translate('Искомый адрес');
         }
         if (position.latitude && position.longitude) {
             this.itemsMap.geoObjects.add(new window.ymaps.Placemark([position.latitude, position.longitude], {
@@ -635,8 +708,8 @@ const LibFinder = React.createClass({
 
         }).then(() => {
             this.itemsMap.geoObjects.add(new window.ymaps.Placemark(positionCoords, {
-                hintContent: `Ваше местоположение: <b>${address}</b>`,
-                balloonContent: `Ваше местоположение: <b>${address}</b>`,
+                hintContent: `${translate('Ваше местоположение')}: <b>${address}</b>`,
+                balloonContent: `${translate('Ваше местоположение')}: <b>${address}</b>`,
             }, {
                 preset: 'islands#redCircleIcon',
             }));
@@ -649,10 +722,9 @@ const LibFinder = React.createClass({
             <div className="map">
                 <div className="map__col-l">
                     <div className="map-nav">
-                        <h3 className="map-nav__title">Алфавитный указатель муниципальных районов</h3>
+                        <h3 className="map-nav__title">{translate('Алфавитный указатель муниципальных районов')}</h3>
                         <p className="map-nav__help-text">
-                            Выберите букву района или нажмите на гео точку для поиска
-                            ближайших библиотек
+                            {translate('Выберите букву района или нажмите на гео точку для поиска ближайших библиотек')}
                         </p>
                         <AddrSearch/>
                         <AbcCrumbs/>

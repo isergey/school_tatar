@@ -3,11 +3,13 @@
 {% load ssearch_tags %}
 {% load order_tags %}
 {% load mydocs_tags %}
+{% load participiants_tags %}
 {% load i18n %}
 {% get_current_language as LANGUAGE_CODE %}
-{% block title %}{% if LANGUAGE_CODE == 'ru' %}Детальная информация{% elif LANGUAGE_CODE == 'tt' %}Детальная информация
+{% block title %}{% if LANGUAGE_CODE == 'ru' %}Детальная информация{% elif LANGUAGE_CODE == 'tt' %}Җентекле мәгълүмат
 {% else %}Detail information{% endif %}{% endblock %}
 {% block content %}
+{#    {% get_user_org as user_org %}#}
     <main>
         <div class="container">
             <nav class="crumb">
@@ -42,7 +44,8 @@
                             {% if LANGUAGE_CODE == 'ru' %}
                                 Детальная информация
                             {% elif LANGUAGE_CODE == 'tt' %}
-                                Детальная информация{% else %}
+                                Җентекле мәгълүмат
+                            {% else %}
                                 Detail information
                             {% endif %}
                         </span>
@@ -54,34 +57,75 @@
                 <div class="col-lg-8 col-md-12">
                     <ul class="record-nav">
                         <li class="record-nav__item record-nav__item_booking">
-                            <button id="recordNavBtn" class="record-nav__link"><i class="icon-menu"></i>&nbsp;&nbsp;Бронирование
+                            <button id="recordNavBtn" class="record-nav__link"><i class="icon-menu"></i>&nbsp;&nbsp;
+                                {% if LANGUAGE_CODE == 'ru' %}
+                                    Заказать документ
+                                {% elif LANGUAGE_CODE == 'tt' %}
+                                    Броньлау
+                                {% else %}
+                                    Reserve document
+                                {% endif %}
                             </button>
                         </li>
                         {% drow_save_doc request.user gen_id %}
                         <li class="record-nav__item">
                             <a class="record-nav__link" href="{% url 'ssearch:frontend:to_print' gen_id %}"
-                               target="_blank"><i class="icon-printer"></i>&nbsp;&nbsp;Печать</a>
+                               target="_blank"><i class="icon-printer"></i>&nbsp;&nbsp;
+                                {% if LANGUAGE_CODE == 'ru' %}
+                                    Печать
+                                {% elif LANGUAGE_CODE == 'tt' %}
+                                    Бастырып чыгарырга
+                                {% else %}
+                                    Print
+                                {% endif %}
+                            </a>
                         </li>
-                        <li class="record-nav__item">
-                            <button id="marcCardBtn" class="record-nav__link"><i class="icon-note"></i>&nbsp;&nbsp;
-                                {% if LANGUAGE_CODE == 'ru' %}Карточка{% elif LANGUAGE_CODE == 'tt' %}
-                                    Карточка{% else %}Card{% endif %}
-                            </button>
-                        </li>
+                        {% if user_org or request.user.is_superuser or request.user.is_staff %}
+                            <li class="record-nav__item">
+                                <button id="marcCardBtn" class="record-nav__link"><i class="icon-note"></i>&nbsp;&nbsp;
+                                    {% if LANGUAGE_CODE == 'ru' %}
+                                        RUSMARC
+                                    {% elif LANGUAGE_CODE == 'tt' %}
+                                        RUSMARC
+                                    {% else %}
+                                        RUSMARC
+                                    {% endif %}
+                                </button>
+                            </li>
+                        {% endif %}
                     </ul>
                     <div class="record-detail">
                         <div class="record-detail__col-text">
                             {{ doc_dump|safe }}
-                            <p class="record-detail__info">Идентификатор записи: {{ gen_id }}</p>
+                            {% if user_org or request.user.is_superuser or request.user.is_staff %}
+                                <p class="record-detail__info">
+                                    {% if LANGUAGE_CODE == 'ru' %}
+                                        Идентификатор записи:
+                                    {% elif LANGUAGE_CODE == 'tt' %}
+                                        Язылу идентификаторы
+                                    {% else %}
+                                        Record ID:
+                                    {% endif %}
+                                    {{ gen_id }}</p>
+                            {% endif %}
                             <p class="record-detail__info">
                                 {% if LANGUAGE_CODE == 'ru' %}Количество
-                                    обращений{% elif LANGUAGE_CODE == 'tt' %}Количество обращений{% else %}
+                                    обращений{% elif LANGUAGE_CODE == 'tt' %}Мөрәҗәгатьләр саны{% else %}
                                     Views{% endif %}
                                 : {{ access_count }}
                             </p>
                             {% if linked_docs %}
                                 <div class="results">
-                                    <p class="header">Это издание состоит из следующих томов/частей: </p>
+                                    <p class="header">
+                                        {% if LANGUAGE_CODE == 'ru' %}
+                                            Это издание состоит из следующих томов/частей:
+                                        {% elif LANGUAGE_CODE == 'tt' %}
+                                            Бу басма түбәндәге томнардан тора/өлештән:
+                                        {% else %}
+                                            This document consists of the following volumes / parts:
+                                        {% endif %}
+
+                                    </p>
                                     <ul class="list">
                                         {% for doc in linked_docs %}
 
@@ -162,17 +206,13 @@
                                 </div>
                             {% endif %}
                         </div>
+                    {% if doc.cover %}
                         <div class="record-detail__col-img">
-                            {#                            {% get_record_cover  %}#}
-                            {% if doc.cover %}
-                                <img class="record-detail__img"
-                                     src="{{ doc.cover.0 }}" alt="">
-                            {% else %}
-                                <img class="record-detail__img"
-                                     src="{{ STATIC_URL }}dist/images/list/file.svg" alt="">
-                            {% endif %}
+                            <img class="record-detail__img" src="{{ doc.cover.0 }}" alt="">
                         </div>
+                    {% endif %}
                     </div>
+
                     <div class="card card_bs-2 marc-card">
                         <div class="card__body">
                             {{ marc_dump|safe }}
@@ -182,12 +222,14 @@
                 <div class="col-lg-4 col-md-12">
                     <div class="record-booking">
                         {% drow_el_order_menu doc.holders doc|hash:"local-number"|hash:0 %}
-                        {% drow_holders_menu gen_id %}
+{#                        {% drow_holders_menu gen_id %}#}
                     </div>
+                    <div class="record-booking" id="record_holdings"></div>
                 </div>
             </div>
         </div>
     </main>
+    <div id="root"></div>
 {% endblock %}
 
 {% block scripts %}
@@ -254,4 +296,12 @@
             return false;
         });
     </script>
+{#    <script crossorigin src="//unpkg.com/react@16/umd/react.production.min.js"></script>#}
+{#    <script crossorigin src="//unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>#}
+{#    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>#}
+{#    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>#}
+{#    <script crossorigin src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>#}
+{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.1/redux.js" crossorigin></script>#}
+{#    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/6.0.1/react-redux.js" crossorigin></script>#}
+{#    <script type="text/babel" src="{{ STATIC_URL }}ssearch/holdings.js">#}
 {% endblock %}

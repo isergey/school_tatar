@@ -1,0 +1,100 @@
+{% extends 'theme_frontend_base.html' %}
+{% load i18n %}
+{% load participiants_tags %}
+{% load cache %}
+{% get_current_language as LANGUAGE_CODE %}
+{% block title %}Личный кабинет{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            <nav class="crumb">
+                <ol class="crumb__list">
+                    <li>
+                        <a href="{% url 'index:frontend:index' %}">
+                            {% if LANGUAGE_CODE == 'ru' %}
+                                Главная
+                            {% elif LANGUAGE_CODE == 'tt' %}
+                                Төп бит
+                            {% else %}
+                                Home
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li>
+                    <span class="crumb__current">
+                        Личный кабинет
+                    </span>
+                    </li>
+                </ol>
+            </nav>
+            <div class="content">
+                <h1 class="content__title">Личный кабинет</h1>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-sm-12">
+                    <div class="card card_mt">
+                        <ul class="card-menu">
+                            <li class="card-menu__item">
+                                <a class="card-menu__link" href="{% url 'orders:frontend:reservations' %}">Заказы на
+                                    бронирование</a>
+                            </li>
+                            <li class="card-menu__item">
+                                <a class="card-menu__link" href="{% url 'mydocs:frontend:index' %}">Мои документы</a>
+                            </li>
+                            <li class="card-menu__item">
+                                <a class="card-menu__link" href="{% url 'ssearch:frontend:saved_search_requests' %}">Поисковые
+                                    запросы</a>
+                            </li>
+                            <li class="card-menu__item">
+                                <a class="card-menu__link" href="{% url 'orders:frontend:on_hand' %}">Выданные книги</a>
+                            </li>
+                            <li class="card-menu__item">
+                                <a class="card-menu__link" href="{% url 'ask_librarian:frontend:my_questions' %}">Мои
+                                    вопросы</a>
+                            </li>
+                            <li class="card-menu__item">
+                                <a class="card-menu__link" href="{% url 'ruslan_cabinet:frontend:remote_return' %}">Удаленный
+                                    возврат</a>
+                            </li>
+                            <li class="card-menu__item">
+                                <a class="card-menu__link" href="{% url 'sso_ruslan:change_email' %}">Изменить email</a>
+                            </li>
+                            {% cache 600 user_org request.user.id %}
+                                {% personal_cabinet_links as cabinet_links %}
+                                {% for cabinet_link in cabinet_links %}
+                                    <li class="card-menu__item">
+                                        <a class="card-menu__link"
+                                           href="{{ cabinet_link.href|safe }}">{{ cabinet_link.title }}</a>
+                                    </li>
+                                {% endfor %}
+                            {% endcache %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-sm-12">
+                    <div class="content">
+                        <p>
+                            {% if not ruslan_user %}
+                                Вы не являетесь читателем
+                            {% else %}
+                                Ваш идентификатор читателя: {{ ruslan_user.username }}
+                            {% endif %}
+                        </p>
+                        {% if current_library %}
+                            <p>
+                                Поиск в библиотеке:
+                                <a href="{% url 'ssearch:frontend:ecatalog' %}?library={{ current_library.code|urlencode }}">
+                                    {% for ancestor in current_library.get_ancestors %}
+                                        {{ ancestor.name }} →
+                                    {% endfor %}
+                                    <b>{{ current_library.name }}</b>
+                                </a>
+                            </p>
+                        {% endif %}
+                        <a class="btn btn_ol" href="{% url 'accounts:frontend:logout' %}">Выйти из аккаунта</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

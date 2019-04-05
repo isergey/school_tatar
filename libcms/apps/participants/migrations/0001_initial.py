@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 import mptt.fields
-from django.conf import settings
 import django.core.validators
+from django.conf import settings
 
 
 class Migration(migrations.Migration):
@@ -24,6 +24,9 @@ class Migration(migrations.Migration):
                 ('tree_id', models.PositiveIntegerField(editable=False, db_index=True)),
                 ('level', models.PositiveIntegerField(editable=False, db_index=True)),
             ],
+            options={
+                'managed': False,
+            },
         ),
         migrations.CreateModel(
             name='District',
@@ -33,6 +36,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'verbose_name': '\u0420\u0430\u0439\u043e\u043d',
+                'managed': False,
                 'verbose_name_plural': '\u0420\u0430\u0439\u043e\u043d\u044b',
             },
         ),
@@ -47,6 +51,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'verbose_name': '\u0417\u0430\u043f\u0438\u0441\u044c \u0436\u0443\u0440\u043d\u0430\u043b\u0430 \u0432\u0437\u0430\u0438\u043c\u043e\u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0439',
+                'managed': False,
                 'verbose_name_plural': '\u0417\u0430\u043f\u0438\u0441\u0438 \u0436\u0443\u0440\u043d\u0430\u043b\u0430 \u0432\u0437\u0430\u0438\u043c\u043e\u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0439',
             },
         ),
@@ -59,6 +64,9 @@ class Migration(migrations.Migration):
                 ('incoming_speed', models.IntegerField(default=0, verbose_name='\u0412\u0445\u043e\u0434\u044f\u0449\u0430\u044f \u0441\u043a\u043e\u0440\u043e\u0441\u0442\u044c (\u041c\u0431/\u0441\u0435\u043a)')),
                 ('outbound_speed', models.IntegerField(default=0, verbose_name='\u0418\u0441\u0445\u043e\u0434\u044f\u0449\u0430\u044f \u0441\u043a\u043e\u0440\u043e\u0441\u0442\u044c (\u041c\u0431/\u0441\u0435\u043a)')),
             ],
+            options={
+                'managed': False,
+            },
         ),
         migrations.CreateModel(
             name='Library',
@@ -91,12 +99,11 @@ class Migration(migrations.Migration):
                 ('rght', models.PositiveIntegerField(editable=False, db_index=True)),
                 ('tree_id', models.PositiveIntegerField(editable=False, db_index=True)),
                 ('level', models.PositiveIntegerField(editable=False, db_index=True)),
-                ('district', models.ForeignKey(verbose_name='\u0420\u0430\u0439\u043e\u043d', blank=True, to='participants.District', null=True)),
-                ('parent', mptt.fields.TreeForeignKey(related_name='children', verbose_name='\u0426\u0411\u0421 \u0438\u043b\u0438 \u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430 \u0432\u0435\u0440\u0445\u043d\u0435\u0433\u043e \u0443\u0440\u043e\u0432\u043d\u044f', blank=True, to='participants.Library', null=True)),
             ],
             options={
                 'verbose_name': '\u0411\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430',
                 'verbose_name_plural': '\u0411\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0438',
+                'managed': False,
                 'permissions': (('add_cbs', 'Can create cbs'), ('change_cbs', 'Can change cbs'), ('delete_cbs', 'Can delete cbs')),
             },
         ),
@@ -104,12 +111,11 @@ class Migration(migrations.Migration):
             name='LibraryContentEditor',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('library', models.ForeignKey(to='participants.Library')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name': '\u0420\u0435\u0434\u0430\u043a\u0442\u043e\u0440 \u043a\u043e\u043d\u0442\u0435\u043d\u0442\u0430 \u0426\u0411\u0421',
                 'verbose_name_plural': '\u0420\u0435\u0434\u0430\u043a\u0442\u043e\u0440\u044b \u043a\u043e\u043d\u0442\u0435\u043d\u0442\u0430 \u0426\u0411\u0421',
+                'managed': False,
             },
         ),
         migrations.CreateModel(
@@ -118,6 +124,9 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(unique=True, max_length=64, verbose_name='\u0422\u0438\u043f \u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0438')),
             ],
+            options={
+                'managed': False,
+            },
         ),
         migrations.CreateModel(
             name='OracleConnection',
@@ -129,8 +138,35 @@ class Migration(migrations.Migration):
                 ('password', models.CharField(help_text='\u0415\u0441\u043b\u0438 \u043e\u0441\u0442\u0430\u0432\u0438\u0442\u044c \u043f\u0443\u0441\u0442\u044b\u043c, \u0431\u0443\u0434\u0435\u0442 \u0434\u0435\u0439\u0441\u0442\u0432\u043e\u0432\u0430\u0442\u044c \u0441\u0442\u0430\u0440\u044b\u0439', max_length=64, verbose_name='\u041f\u0430\u0440\u043e\u043b\u044c', blank=True)),
                 ('schema', models.CharField(max_length=64, verbose_name='\u0421\u0445\u0435\u043c\u0430 \u0434\u0430\u043d\u043d\u044b\u0445')),
                 ('bib_databases', models.TextField(help_text='\u0418\u043c\u044f \u0431\u0430\u0437\u044b \u0441 \u043d\u043e\u0432\u043e\u0439 \u0441\u0442\u0440\u043e\u043a\u0438', max_length=1024, verbose_name='\u0421\u043f\u0438\u0441\u043e\u043a \u0431\u0438\u0431\u043b\u0438\u043e\u0433\u0440\u0430\u0444\u0438\u0447\u0435\u0441\u043a\u0438\u0445 \u0431\u0430\u0437 \u0434\u0430\u043d\u043d\u044b\u0445')),
-                ('library', models.ForeignKey(to='participants.Library')),
             ],
+            options={
+                'managed': False,
+            },
+        ),
+        migrations.CreateModel(
+            name='UserLibraryPosition',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=255, verbose_name='\u0414\u043e\u043b\u0436\u043d\u043e\u0441\u0442\u044c')),
+            ],
+            options={
+                'ordering': ['name'],
+                'verbose_name': '\u0414\u043e\u043b\u0436\u043d\u043e\u0441\u0442\u044c \u0441\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a\u0430',
+                'managed': False,
+                'verbose_name_plural': '\u0414\u043e\u043b\u0436\u043d\u043e\u0441\u0442\u0438 \u0441\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a\u043e\u0432',
+            },
+        ),
+        migrations.CreateModel(
+            name='WiFiPoint',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('mac', models.CharField(max_length=17, validators=[django.core.validators.MinLengthValidator(limit_value=17)], help_text='\u041f\u0440\u0438\u043c\u0435\u0440: 84:80:2d:2b:be:b0', unique=True, verbose_name='MAC \u0430\u0434\u0440\u0435\u0441', db_index=True)),
+                ('status', models.CharField(default=b'enabled', max_length=16, verbose_name='\u0421\u0442\u0430\u0442\u0443\u0441', db_index=True, choices=[(b'enabled', '\u0430\u043a\u0442\u0438\u0432\u043d\u0430'), (b'disabled', '\u043d\u0435\u0430\u043a\u0442\u0438\u0432\u043d\u0430')])),
+                ('comments', models.TextField(max_length=10240, verbose_name='\u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0438', blank=True)),
+            ],
+            options={
+                'managed': False,
+            },
         ),
         migrations.CreateModel(
             name='UserLibrary',
@@ -148,83 +184,16 @@ class Migration(migrations.Migration):
                 ('is_active', models.BooleanField(default=True, help_text='\u0410\u043a\u0442\u0438\u0432\u0438\u0437\u0430\u0446\u0438\u044f \u043f\u043e\u043b\u043d\u043e\u043c\u043e\u0447\u0438\u0439 \u0440\u043e\u043b\u0435\u0439', verbose_name='\u0410\u043a\u0442\u0438\u0432\u0435\u043d')),
                 ('department', mptt.fields.TreeForeignKey(verbose_name='\u041e\u0442\u0434\u0435\u043b', to='participants.Department')),
                 ('library', models.ForeignKey(to='participants.Library')),
+                ('position', models.ForeignKey(verbose_name='\u0414\u043e\u043b\u0436\u043d\u043e\u0441\u0442\u044c', to='participants.UserLibraryPosition')),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name': '\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u0438 \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u0438',
                 'verbose_name_plural': '\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u0438 \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u0439',
             },
         ),
-        migrations.CreateModel(
-            name='UserLibraryPosition',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=255, verbose_name='\u0414\u043e\u043b\u0436\u043d\u043e\u0441\u0442\u044c')),
-            ],
-            options={
-                'ordering': ['name'],
-                'verbose_name': '\u0414\u043e\u043b\u0436\u043d\u043e\u0441\u0442\u044c \u0441\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a\u0430',
-                'verbose_name_plural': '\u0414\u043e\u043b\u0436\u043d\u043e\u0441\u0442\u0438 \u0441\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a\u043e\u0432',
-            },
-        ),
-        migrations.CreateModel(
-            name='WiFiPoint',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('mac', models.CharField(max_length=17, validators=[django.core.validators.MinLengthValidator(limit_value=17)], help_text='\u041f\u0440\u0438\u043c\u0435\u0440: 84:80:2d:2b:be:b0', unique=True, verbose_name='MAC \u0430\u0434\u0440\u0435\u0441', db_index=True)),
-                ('status', models.CharField(default=b'enabled', max_length=16, verbose_name='\u0421\u0442\u0430\u0442\u0443\u0441', db_index=True, choices=[(b'enabled', '\u0430\u043a\u0442\u0438\u0432\u043d\u0430'), (b'disabled', '\u043d\u0435\u0430\u043a\u0442\u0438\u0432\u043d\u0430')])),
-                ('comments', models.TextField(max_length=10240, verbose_name='\u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0438', blank=True)),
-                ('library', models.ForeignKey(to='participants.Library')),
-            ],
-        ),
-        migrations.AddField(
-            model_name='userlibrary',
-            name='position',
-            field=models.ForeignKey(verbose_name='\u0414\u043e\u043b\u0436\u043d\u043e\u0441\u0442\u044c', to='participants.UserLibraryPosition'),
-        ),
-        migrations.AddField(
-            model_name='userlibrary',
-            name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
-        ),
-        migrations.AddField(
-            model_name='library',
-            name='types',
-            field=models.ManyToManyField(to='participants.LibraryType', verbose_name='\u0422\u0438\u043f \u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0438', blank=True),
-        ),
-        migrations.AddField(
-            model_name='internetconnection',
-            name='library',
-            field=models.ForeignKey(to='participants.Library'),
-        ),
-        migrations.AddField(
-            model_name='interactionjournal',
-            name='library',
-            field=models.ForeignKey(verbose_name='\u041e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u044f', to='participants.Library'),
-        ),
-        migrations.AddField(
-            model_name='department',
-            name='library',
-            field=models.ForeignKey(to='participants.Library'),
-        ),
-        migrations.AddField(
-            model_name='department',
-            name='parent',
-            field=mptt.fields.TreeForeignKey(related_name='children', verbose_name='\u041e\u0442\u0434\u0435\u043b \u0432\u0435\u0440\u0445\u043d\u0435\u0433\u043e \u0443\u0440\u043e\u0432\u043d\u044f', blank=True, to='participants.Department', null=True),
-        ),
         migrations.AlterUniqueTogether(
             name='userlibrary',
             unique_together=set([('library', 'user')]),
-        ),
-        migrations.AlterUniqueTogether(
-            name='librarycontenteditor',
-            unique_together=set([('library', 'user')]),
-        ),
-        migrations.AlterUniqueTogether(
-            name='library',
-            unique_together=set([('code', 'sigla')]),
-        ),
-        migrations.AlterUniqueTogether(
-            name='department',
-            unique_together=set([('parent', 'name')]),
         ),
     ]

@@ -14,52 +14,30 @@
     </h1>
     <ul>
         {% for collection in collections %}
-            {% if collection.title == 'Фонд И. А. Второва' %}
-                <li><a href="#vtorov"
-                       data-custom-open="modal-{{ collection|hash:'persistant-number'|hash:0 }}">{{ collection.title.0 }}</a>:
-                    {{ collection.value }}</li>
-            {% elif collection.title == 'Коллекция И. А. Сахарова' %}
-                <li><a href="#saharov"
-                       data-custom-open="modal-{{ collection|hash:'persistant-number'|hash:0 }}">{{ collection.title.0 }}</a>:
-                    {{ collection.value }}</li>
-            {% elif collection.title == 'Татарика' %}
-                <li><a href="#tatarika"
-                       data-custom-open="modal-{{ collection|hash:'persistant-number'|hash:0 }}">{{ collection.title }}</a>:
-                    {{ collection.value }}</li>
-            {% elif collection.title == 'Прижизненные издания Г.Тукая' %}
-                <li><a href="#tukay"
-                       data-custom-open="modal-{{ collection|hash:'persistant-number'|hash:0 }}">{{ collection.title }}</a>:
-                    {{ collection.value }}</li>
-            {% elif collection.title == 'Коллекция русской старопечатной книги (до 1830 г.)' %}
-                <li><a href="#staropecht"
-                       data-custom-open="modal-{{ collection|hash:'persistant-number'|hash:0 }}">{{ collection.title }}</a>:
-                    {{ collection.value }}</li>
-            {% elif collection.title == 'Книги подаренные авторами' %}
-                <li><a href="#present"
-                       data-custom-open="modal-{{ collection|hash:'persistant-number'|hash:0 }}">{{ collection.title }}</a>:
-                    {{ collection.value }}</li>
-            {% elif collection.title == 'Периодические издания Казанской губернии' %}
-                <li><a href="#periodkazan"
-                       data-custom-open="modal-{{ collection|hash:'persistant-number'|hash:0 }}">{{ collection.title }}</a>:
-                    {{ collection.value }}</li>
-            {% elif collection.title == 'Тестовая коллекция' %}
-                {#                <li><a href="{% url ssearch:frontend:ecollection %}?q=%2A&q=Тестовая+коллекция&attr=text&attr=fond_sf&in_founded=on">{{ collection.title }}</a>: {{ collection.value }}</li>#}
-            {% else %}
-                <li><a href="#{{ collection|hash:'persistant-number'|hash:0 }}"
-                       data-custom-open="modal-{{ collection|hash:'persistant-number'|hash:0 }}">{{ collection.title.0 }}</a>: {{ collection.stats }}
-                </li>
-            {% endif %}
+             <li>
+                 <a href="#vtorov"
+                       data-custom-open="modal-{{ collection|hash:'persistant-number'|hash:0 }}">
+                     {% if LANGUAGE_CODE == 'ru' %}
+                        {{ collection.title.0 }}
+                     {% elif LANGUAGE_CODE == 'tt' %}
+                        {{ collection.collection_title_tt.0 }}
+                     {% else %}
+                        {{ collection.collection_title_en.0 }}
+                     {% endif %}
+
+                 </a>: {{ collection.stats }}
+             </li>
         {% endfor %}
     </ul>
     <p>
         {% if LANGUAGE_CODE == 'ru' %}
-            Всего документов в коллекции:
+            <a href="/ru/ssearch/ecollection/?attr=text_t&q=*">Всего документов в коллекции: {{ stats.count_all }}</a>
         {% elif LANGUAGE_CODE == 'tt' %}
-            Коллекциядә барлык документлар саны
+            <a href="/tt/ssearch/ecollection/?attr=text_t&q=*">Коллекциядә барлык документлар саны: {{ stats.count_all }}</a>
         {% else %}
-            Total documents:
+            <a href="/en/ssearch/ecollection/?attr=text_t&q=*">Total documents: {{ stats.count_all }}</a>
         {% endif %}
-        {{ stats.count_all }}
+
     </p>
     <p>
         {% if LANGUAGE_CODE == 'ru' %}
@@ -67,7 +45,7 @@
         {% elif LANGUAGE_CODE == 'tt' %}
             Бу ай эчендә өстәлгән:
         {% else %}
-            Added for the current month:
+            Сurrent month arrivals:
         {% endif %}
         {{ stats.count_last_month }}
     </p>
@@ -77,7 +55,7 @@
         {% elif LANGUAGE_CODE == 'tt' %}
             Соңгы 30 көн эчендә өстәлгән:
         {% else %}
-            Added in the last 30 days:
+            Last 30 days arrivals:
         {% endif %}
         {{ stats.count_last_30 }}
     </p>
@@ -90,7 +68,13 @@
             <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
                 <header class="modal__header">
                     <h2 class="modal__title" id="modal-1-title">
+                        {% if LANGUAGE_CODE == 'ru' %}
                         {{ collection.title.0 }}
+                     {% elif LANGUAGE_CODE == 'tt' %}
+                        {{ collection.collection_title_tt.0 }}
+                     {% else %}
+                        {{ collection.collection_title_en.0 }}
+                     {% endif %}
                     </h2>
                     <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
                 </header>
@@ -99,12 +83,30 @@
                         <div class="col-lg-9 col-sm-12">
                             <div class="content">
                                 <a href="{% url 'ssearch:frontend:ecollection' %}?q=%2A&q={{ collection|hash:'persistant-number'|hash:0 }}&attr=text&attr=fond_sf&in_founded=on">
-                                    Поиск по коллекции
+
+                                    {% if LANGUAGE_CODE == 'ru' %}
+                                        Поиск по коллекции:
+                                    {% elif LANGUAGE_CODE == 'tt' %}
+                                        Эзләү буенча коллекцияләр:
+                                    {% else %}
+                                        Collection search:
+                                    {% endif %}
                                 </a>
                                 <ul>
-                                    {% for comments in collection.comments %}
-                                        <li>{{ comments }}</li>
-                                    {% endfor %}
+                                    {% if LANGUAGE_CODE == 'ru' %}
+                                        {% for comments in collection.comments %}
+                                            <li>{{ comments }}</li>
+                                        {% endfor %}
+                                    {% elif LANGUAGE_CODE == 'tt' %}
+                                        {% for comments in collection.comments_tt %}
+                                            <li>{{ comments }}</li>
+                                        {% endfor %}
+                                    {% else %}
+                                        {% for comments in collection.comments_en %}
+                                            <li>{{ comments }}</li>
+                                        {% endfor %}
+                                    {% endif %}
+
                                 </ul>
                             </div>
                         </div>
@@ -118,7 +120,15 @@
                     </div>
                 </div>
                 <footer class="modal__footer">
-                    <button class="btn btn_ol" data-micromodal-close>Закрыть</button>
+                    <button class="btn btn_ol" data-micromodal-close>
+                        {% if LANGUAGE_CODE == 'ru' %}
+                            Закрыть
+                        {% elif LANGUAGE_CODE == 'tt' %}
+                            Каплау
+                        {% else %}
+                            Close
+                        {% endif %}
+                    </button>
                 </footer>
             </div>
         </div>

@@ -1,0 +1,313 @@
+﻿{% load i18n %}
+{% load localeurl_tags %}
+{% load menu_tags %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="theme-color" content="#4270ba">
+
+    <title>{% block title %}Национальная электронная библиотека Республики Татарстан{% endblock %}</title>
+
+    <meta name="description" content>
+    <meta name="keywords" content>
+
+    <link rel="icon" type="image/ico" href="{{ STATIC_URL }}theme/favicon.ico"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}dist/styles/index.css?123456">
+    {#    <script src="{{ STATIC_URL }}js/jquery.min.js"></script>#}
+    {#    <script src="{{ STATIC_URL }}dist/vendors/bootstrap/bootstrap.min.js"></script>#}
+    {#    <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>#}
+
+    {#    <script src="{{ STATIC_URL }}dist/vendors/owl-carousel/owl.carousel.min.js"></script>#}
+    {#    <script src="{{ STATIC_URL }}js/lodash.compat.min.js"></script>#}
+    {#    <script src="{{ STATIC_URL }}js/browser-polyfill.min.js"></script>#}
+    {#    <script src="{{ STATIC_URL }}js/browser.min.js"></script>#}
+    {#    <script src="{{ STATIC_URL }}js/system.js"></script>#}
+    {#    <script src="//api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>#}
+    {#    <script>#}
+    {#        System.config({#}
+    {#            map: {#}
+    {#                eventemitter3: '{{ STATIC_URL }}js/eventemitter3.js',#}
+    {#                jquery: '{{ STATIC_URL }}js/jquery.min.js',#}
+    {#                lodash: '{{ STATIC_URL }}js/lodash.compat.min.js',#}
+    {#                'owl-carousel': '{{ STATIC_URL }}dist/vendors/owl-carousel/owl.carousel.min.js',#}
+    {#                react: '{{ STATIC_URL }}js/react-with-addons.min.js',#}
+    {#                typehead: '{{ STATIC_URL }}js/typeahead.jquery.min.js',#}
+    {#            },#}
+    {#            baseURL: '{{ STATIC_URL }}apps',#}
+    {#            transpiler: 'babel'#}
+    {#        });#}
+    {#        System.import('base.js');#}
+    {#        // loads /app/main.js#}
+    {##}
+    {#    </script>#}
+    {#    {% block scripts %}{% endblock %}#}
+
+</head>
+<body>
+<div class="content-wrap">
+    {% if request.path_info != '/' %}
+        <div class="header-wrap-bg">{% endif %}
+    <div class="container">
+        <header class="header">
+            <button class="header__nav-btn">
+                <i title="Открыть меню" class="icon-menu"></i>
+            </button>
+            <a class="logo header__logo" href="{% url 'index:frontend:index' %}" title="На главную!">
+                <div class="logo__img-wrap">
+                    <img class="logo__img" src="{{ STATIC_URL }}dist/images/logo/logo.png"
+                         alt="
+                            {% if LANGUAGE_CODE == 'ru' %}
+                                Национальная электронная библиотека Республики Татарстан
+                                Школьные библиотеки
+                            {% elif LANGUAGE_CODE == 'tt' %}
+                                Татарстан Республикасының Милли
+                                электрон китапханәсе
+                            {% else %}
+                                National Electronic Library of the
+                                Republic of Tatarstan
+                            {% endif %}
+                        ">
+                </div>
+                <div class="logo__text">
+                    {% if LANGUAGE_CODE == 'ru' %}
+                        <span>Национальная электронная библиотека РТ</span>
+                        <span>Школьные библиотеки</span>
+                    {% elif LANGUAGE_CODE == 'tt' %}
+                        <span>Татарстан Республикасының Милли</span>
+                        <span>Мәктәп китапханәләре</span>
+                    {% else %}
+                        <span>National Electronic Library of the Republic of Tatarstan</span>
+                        <span>School libraries</span>
+                    {% endif %}
+                </div>
+                <div class="logo__text-sm">
+                    {% if LANGUAGE_CODE == 'ru' %}
+                        НЭБ РТ
+                    {% elif LANGUAGE_CODE == 'tt' %}
+                        ТРМ ЭК
+                    {% else %}
+                        NEL RT
+                    {% endif %}
+                </div>
+            </a>
+            <ul class="nav nav_tool header__tool">
+                <li class="nav__item {% if "/ru" in request.path %}nav__item_active{% endif %}">
+                    <a href="/ru{{ request.path|rmlocale }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}"
+                    class="nav__link"
+                    title="Русский">Рус</a>
+                </li>
+                <li class="nav__item {% if "/tt" in request.path %}nav__item_active{% endif %}">
+                    <a href="/tt{{ request.path|rmlocale }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}"
+                    class="nav__link"
+                    title="Татарский">Тат</a>
+                </li>
+                <li class="nav__item {% if "/en" in request.path %}nav__item_active{% endif %}">
+                    <a href="/en{{ request.path|rmlocale }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}"
+                    class="nav__link"
+                    title="English">Eng</a>
+                </li>
+                <li class="nav__item">
+                    <a class="nav__link bvi-panel-open" href="#"><i class="icon-eye"
+                                                                    title="Версия для слабовидящих"></i></a>
+                </li>
+            </ul>
+            {% include 'cabinet.html' %}
+        </header>
+        <nav class="nav-wrap">
+            <ul class="nav nav_tool">
+                <li class="nav__item {% if "/ru" in request.path %}nav__item_active{% endif %}">
+                    <a href="/ru
+
+                            {{ request.path|rmlocale }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}"
+                       class="nav__link"
+                       title="Русский">Рус</a>
+                </li>
+                <li class="nav__item {% if "/tt" in request.path %}nav__item_active{% endif %}">
+                    <a href="/tt
+
+                            {{ request.path|rmlocale }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}"
+                       class="nav__link"
+                       title="Татарский">Тат</a>
+                </li>
+                <li class="nav__item {% if "/en" in request.path %}nav__item_active{% endif %}">
+                    <a href="/en
+
+                            {{ request.path|rmlocale }}{% if request.META.QUERY_STRING %}?{{ request.META.QUERY_STRING }}{% endif %}"
+                       class="nav__link"
+                       title="English">Eng</a>
+                </li>
+            </ul>
+            {% include 'cabinet-mobile.html' %}
+            {% include 'main_menu.html' %}
+        </nav>
+    </div>
+    {% if request.path_info != '/' %}</div>{% endif %}
+    {% block content %}{% endblock %}
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            {% include 'main_menu_footer.html' %}
+            <ul class="footer-nav">
+                <li class="footer-nav__item">
+                    <a class="footer-nav__link" href="{% url 'index:frontend:index' %}" title="На главную!">Национальная
+                        электронная библиотека Республики Татарстан</a>
+                </li>
+                <li class="footer-nav__item">
+                    <a class="footer-nav__link" href="http://mic.tatarstan.ru/" target="_blank"
+                       rel="nofollow, noopener">Министерство информатизации и связи Республики Татарстан</a>
+                </li>
+            </ul>
+        </div>
+    </footer>
+
+    {% if request.path_info == '/' %}
+        <div class="bg"></div>
+    {% endif %}
+
+</div>
+
+<div class="nav-mask"></div>
+<div class="search-mask"></div>
+<div class="record-mask"></div>
+<div class="ask-mask"></div>
+
+<script src="{{ STATIC_URL }}dist/vendors/jquery-2.2.4.min.js?1234"></script>
+<script src="{{ STATIC_URL }}dist/vendors/swiper/js/swiper.min.js?1234"></script>
+<script src="{{ STATIC_URL }}dist/vendors/micromodal/micromodal.min.js?1234"></script>
+<script src="{{ STATIC_URL }}dist/js/main.js?1234"></script>
+<script src="{{ STATIC_URL }}dist/vendors/visually/button-visually-impaired/js/responsivevoice.min.js?ver=1.5.0?1234"></script>
+<script src="{{ STATIC_URL }}dist/js/bvi-init-panel.js?1234"></script>
+<script src="{{ STATIC_URL }}dist/js/bvi.js?1234"></script>
+<script src="{{ STATIC_URL }}dist/vendors/visually/button-visually-impaired/js/js.cookie.js?1234"></script>
+<script src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js?1234"></script>
+<script src="//yastatic.net/share2/share.js?1234"></script>
+<script src="{{ STATIC_URL }}js/lodash.compat.min.js?1234"></script>
+<script src="{{ STATIC_URL }}js/browser-polyfill.min.js?1234"></script>
+<script src="{{ STATIC_URL }}js/browser.min.js?1234"></script>
+<script src="{{ STATIC_URL }}js/system.js?1234"></script>
+<script src="//api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+<script>
+    System.config({
+        map: {
+            eventemitter3: '/static/js/eventemitter3.js',
+            jquery: '/static/js/jquery.min.js',
+            lodash: '/static/js/lodash.compat.min.js',
+            //'owl-carousel': '/static/dist/vendors/owl-carousel/owl.carousel.min.js',
+            react: '/static/js/react-with-addons.min.js',
+            typehead: '/static/js/typeahead.jquery.min.js',
+        },
+        baseURL: '/static/apps',
+        transpiler: 'babel'
+    });
+    System.import('base.js');
+</script>
+{% block scripts %}{% endblock %}
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">(function (d, w, c) {
+    (w[c] = w[c] || []).push(function () {
+        try {
+            w.yaCounter17301607 = new Ya.Metrika({id: 17301607, enableAll: true, webvisor: true});
+        } catch (e) {
+        }
+    });
+    var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () {
+        n.parentNode.insertBefore(s, n);
+    };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f);
+    } else {
+        f();
+    }
+})(document, window, "yandex_metrika_callbacks");</script>
+<noscript>
+    <div><img src="//mc.yandex.ru/watch/17301607" style="position:absolute; left:-9999px;" alt=""/></div>
+</noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function () {
+            try {
+                w.yaCounter28345621 = new Ya.Metrika({
+                    id: 28345621,
+                    clickmap: true,
+                    trackLinks: true,
+                    accurateTrackBounce: true
+                });
+            } catch (e) {
+            }
+        });
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () {
+                n.parentNode.insertBefore(s, n);
+            };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else {
+            f();
+        }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript>
+    <div><img src="//mc.yandex.ru/watch/28345621" style="position:absolute; left:-9999px;" alt=""/></div>
+</noscript>
+<!-- /Yandex.Metrika counter -->
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-36488484-1']);
+    _gaq.push(['_trackPageview']);
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+
+
+<script>
+    $(function () {
+        $.get('{% url 'statistics:api:watch' %}');
+    });
+</script>
+<!-- Piwik -->
+<!-- Piwik -->
+<script type="text/javascript">
+    var _paq = _paq || [];
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function () {
+        var u = "//ua.tatar.ru/";
+        _paq.push(['setTrackerUrl', u + 'piwik.php']);
+        _paq.push(['setSiteId', 22]);
+        <!-- "a0a0a0a0a0a0a0a0" should be replaced by a hash user id from your system -->
+        _paq.push(['setUserId', "{{ request.user.pk }}"]);
+        var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+        g.type = 'text/javascript';
+        g.async = true;
+        g.defer = true;
+        g.src = u + 'piwik.js';
+        s.parentNode.insertBefore(g, s);
+    })();
+</script>
+<noscript><p><img src="//ua.tatar.ru/piwik.php?idsite=22" style="border:0;" alt=""/></p></noscript>
+<!-- End Piwik Code -->
+</body>
+</html>
+<!-- app mac1 {{ request.session.ap_mac }} -->
+<!--  {{ request.user.id }} -->
+<!-- dev -->

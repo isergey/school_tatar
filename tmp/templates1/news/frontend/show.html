@@ -1,0 +1,84 @@
+{% extends 'theme_frontend_base.html' %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% load news_tags %}
+{% block title %}{{ content.title }}{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            <nav class="crumb">
+                <ol class="crumb__list">
+                    <li>
+                        <a href="{% url 'index:frontend:index' %}">
+                            {% if LANGUAGE_CODE == 'ru' %}
+                                Главная
+                            {% elif LANGUAGE_CODE == 'tt' %}
+                                Төп бит
+                            {% else %}
+                                Home
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li>
+                        {% if request.GET.back %}
+                            <a href="{{ request.GET.back }}">
+                                {% if LANGUAGE_CODE == 'ru' %}
+                                    Новости
+                                {% elif LANGUAGE_CODE == 'tt' %}
+                                    Яңалыклар
+                                {% else %}
+                                    News
+                                {% endif %}
+                            </a>
+                        {% else %}
+                            <a href="{% url 'news:frontend:index' %}">
+                                {% if LANGUAGE_CODE == 'ru' %}
+                                    Новости
+                                {% elif LANGUAGE_CODE == 'tt' %}
+                                    Яңалыклар
+                                {% else %}
+                                    News
+                                {% endif %}
+                            </a>
+                        {% endif %}
+                    </li>
+                </ol>
+            </nav>
+            <div class="row">
+                <div class="col-lg-7 col-md-12">
+                    <div class="content">
+                        <h1 class="content__title">{{ content.title }}</h1>
+                        <div class="content__info">
+                            <time class="content__date"><span
+                                    class="icon-wall-clock"></span>&nbsp;&nbsp;{{ news.create_date }}</time>
+                        </div>
+                        {{ content.content|safe }}
+                    </div>
+                    <div class="ya-share2"
+                         data-services="vkontakte,facebook,odnoklassniki,gplus,twitter,viber,whatsapp,telegram"></div>
+                </div>
+                <div class="col-lg-5 col-md-12">
+                    <section class="card card_md-mt">
+                        <header class="card__header">
+                            <h2 class="card__title">Другие новости</h2>
+                        </header>
+                        <div class="card__body">
+                            {% other_news news.id %}
+                        </div>
+                        <div class="card__footer">
+                            <ul class="card-nav">
+                                <li class="card-nav__item">
+                                    <a class="card-nav__link" href="{% url 'news:frontend:index' %}">Все новости</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

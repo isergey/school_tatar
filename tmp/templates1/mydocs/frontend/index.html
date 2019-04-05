@@ -1,0 +1,88 @@
+{% extends 'theme_frontend_base.html' %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% block title %}Мои документы{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            <nav class="crumb">
+                <ol class="crumb__list">
+                    <li>
+                        <a href="{% url 'index:frontend:index' %}">
+                            {% if LANGUAGE_CODE == 'ru' %}
+                                Главная
+                            {% elif LANGUAGE_CODE == 'tt' %}
+                                Төп бит
+                            {% else %}
+                                Home
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'personal:frontend:index' %}">
+                            Личный кабинет
+                        </a>
+                    </li>
+                    <li>
+                        <span class="crumb__current">
+                            Мои документы
+                        </span>
+                    </li>
+                </ol>
+            </nav>
+            <div class="content">
+                <h1 class="content__title">Мои документы</h1>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    {% if list %}
+                        <div class="content">
+                            <p>Список: {{ list.name }} <a href="{% url 'm' %}"></a></p>
+                        </div>
+                    {% endif %}
+                    {% for record in records %}
+                        <section id="{{ record.saved_doc.gen_id }}" class="card card_bs-2 card_mt">
+                            <div class="card__body">
+                                {{ record.bib.0|safe }}
+                                <div class="content">
+                                    {% if record.saved_doc.comments %}
+                                        <p>{{ record.saved_doc.comments }}</p>
+                                    {% endif %}
+                                </div>
+                                <a class="btn" href="{% url 'ssearch:frontend:detail' record.saved_doc.gen_id %}">Подробнее</a>
+                                <a class="btn btn_ol" href="{% url 'mydocs:frontend:delete' record.saved_doc.id %}"
+                                   class="delete">Удалить</a>
+                            </div>
+                        </section>
+
+                    {% empty %}
+                        <br>
+                        <div class="alert alert-info">Список документов пуст.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript">
+        $('.delete').click(function () {
+            var button = $(this);
+            $.ajax({
+                url: $(this).attr('href'),
+                type: 'GET',
+                dataType: "json",
+                async: true,
+                success: function (response) {
+                    if (response['status'] == 'ok') {
+                        button.parent().parent().hide();
+                    }
+                    else {
+                        alert('При удалении возникла ошибка');
+                    }
+                }
+            });
+            return false;
+        });
+    </script>
+{% endblock %}

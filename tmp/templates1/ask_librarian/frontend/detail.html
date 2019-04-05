@@ -1,0 +1,117 @@
+{% extends 'ask_librarian/frontend/index.html' %}
+{% load cache %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% block title %}
+    {% if LANGUAGE_CODE == 'ru' %}
+        Спроси библиотекаря
+    {% elif LANGUAGE_CODE == 'tt' %}
+        Китапханәчедән сора
+    {% else %}
+        Ask librarian
+    {% endif %}
+    /
+    Вопрос № {{ question.id }}
+{% endblock %}
+{% block breadcrumb %}
+    <nav class="crumb">
+        <ol class="crumb__list">
+            <li>
+                <a href="{% url 'index:frontend:index' %}">
+                    {% if LANGUAGE_CODE == 'ru' %}
+                        Главная
+                    {% elif LANGUAGE_CODE == 'tt' %}
+                        Төп бит
+                    {% else %}
+                        Home
+                    {% endif %}
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'ask_librarian:frontend:index' %}">
+                    {% if LANGUAGE_CODE == 'ru' %}
+                        Спроси библиотекаря
+                    {% elif LANGUAGE_CODE == 'tt' %}
+                        Китапханәчедән сора
+                    {% else %}
+                        Ask librarian
+                    {% endif %}
+                </a>
+            </li>
+            <li>
+                <span class="crumb__current">
+                    Вопрос № {{ question.id }}
+                </span>
+            </li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block index_content %}
+    <div class="content">
+        <h1 class="content__title">
+            {% if LANGUAGE_CODE == 'ru' %}
+                Спроси библиотекаря
+            {% elif LANGUAGE_CODE == 'tt' %}
+                Китапханәчедән сора
+            {% else %}
+                Ask librarian
+            {% endif %}
+            →
+            Вопрос № {{ question.id }}
+        </h1>
+    </div>
+    <ul class="ask-nav">
+        <li class="ask-nav__item">
+            <a class="ask-nav__link" href="{% url 'ask_librarian:frontend:ask' %}">Задать вопрос</a>
+        </li>
+        <li class="ask-nav__item">
+            <button id="askNavBtn" class="ask-nav__link">Категории вопросов</button>
+        </li>
+    </ul>
+
+    <div class="content">
+        {% if question.is_ready %}
+            {{ question.question|safe }}
+        {% else %}
+            <p>{{ question.question }}</p>
+        {% endif %}
+        <div class="content__sub">
+            {% if question.category_id %}
+                <span>
+                    Категория:
+                    {% cache 30 questions_category question.category_id LANGUAGE_CODE %}
+                        {% for ancestor in  question.category.get_t_ancestors %}
+                            {{ ancestor }}  →
+                        {% endfor %}
+                        {{ question.category }}
+                    {% endcache %}
+                </span>
+            {% endif %}
+            <span>Статус: {{ question.get_status_display }}</span>
+        </div>
+        <h2>Ответ</h2>
+        {% if question.is_ready %}
+            {{ question.answer|safe }}
+            {% if bib_records %}
+                <h3>Библиографические записи к ответу:</h3>
+                <ul>
+                    {% for bib_record in bib_records %}
+                        <li>
+                            {{ bib_record.card|safe }}
+                            <a href="{% url 'ssearch:frontend:detail' bib_record.record.gen_id %}">Подробнее</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% else %}
+            <div class="alert alert-info">
+                Ответа на вопрос еще нет.
+            </div>
+            <br>
+        {% endif %}
+        <a class="btn" href="{% url 'ask_librarian:frontend:printed_detail' question.id %}" target="_blank">Версия
+            для
+            печати</a>
+    </div>
+{% endblock %}

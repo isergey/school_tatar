@@ -10,7 +10,7 @@
         {% elif LANGUAGE_CODE == 'tt' %}
             Китапханәчедән сора
         {% else %}
-            Ask librarian
+            Ask a librarian
         {% endif %}
         /
         {{ category }}
@@ -20,7 +20,7 @@
         {% elif LANGUAGE_CODE == 'tt' %}
             Китапханәчедән сора
         {% else %}
-            Ask librarian
+            Ask a librarian
         {% endif %}
     {% endif %}
 {% endblock %}
@@ -74,7 +74,7 @@
                         {% elif LANGUAGE_CODE == 'tt' %}
                             Китапханәчедән сора
                         {% else %}
-                            Ask librarian
+                            Ask a librarian
                         {% endif %}
                     </span>
                 </li>
@@ -91,7 +91,7 @@
                 {% elif LANGUAGE_CODE == 'tt' %}
                     Китапханәчедән сора
                 {% else %}
-                    Ask librarian
+                    Ask a librarian
                 {% endif %}
                 →
                 {{ category }}
@@ -101,17 +101,33 @@
                 {% elif LANGUAGE_CODE == 'tt' %}
                     Китапханәчедән сора
                 {% else %}
-                    Ask librarian
+                    Ask a librarian
                 {% endif %}
             {% endif %}
         </h1>
     </div>
     <ul class="ask-nav">
         <li class="ask-nav__item">
-            <a class="ask-nav__link" href="{% url 'ask_librarian:frontend:ask' %}">Задать вопрос</a>
+            <a class="ask-nav__link" href="{% url 'ask_librarian:frontend:ask' %}">
+                {% if LANGUAGE_CODE == 'ru' %}
+                    Задать вопрос
+                {% elif LANGUAGE_CODE == 'tt' %}
+                    Сорау бирү
+                {% else %}
+                    Ask a question
+                {% endif %}
+            </a>
         </li>
         <li class="ask-nav__item">
-            <button id="askNavBtn" class="ask-nav__link">Категории вопросов</button>
+            <button id="askNavBtn" class="ask-nav__link">
+                {% if LANGUAGE_CODE == 'ru' %}
+                    Категории вопросов
+                {% elif LANGUAGE_CODE == 'tt' %}
+                    Сораулар категорияләре
+                {% else %}
+                    Questions breakdown
+                {% endif %}
+            </button>
         </li>
     </ul>
     <br>
@@ -138,9 +154,9 @@
                 <div class="form-group">
                     <label class="control-label">
                         {% if LANGUAGE_CODE == 'ru' %}
-                            Найти вопросы по дате:
+                            Найти по дате:
                         {% elif LANGUAGE_CODE == 'tt' %}
-                            Сорауны дата буенча табу:
+                            Дата буенча табарга:
                         {% else %}
                             Filter by date:
                         {% endif %}
@@ -167,7 +183,16 @@
         {% for question in questions_page.object_list %}
             <div class="list__item">
                 <div class="list__col-text">
-                    <span class="list__num">Вопрос № {{ question.id }}</span>
+                    <span class="list__num">
+                        {% if LANGUAGE_CODE == 'ru' %}
+                            Вопрос №
+                        {% elif LANGUAGE_CODE == 'tt' %}
+                            Эш №
+                        {% else %}
+                            Question #
+                        {% endif %}
+                        {{ question.id }}
+                    </span>
                     <div class="list__title list__title_sm">
                         <a class="list__title-link"
                            href="{% url 'ask_librarian:frontend:detail' question.id %}">
@@ -196,7 +221,15 @@
             </div>
         {% empty %}
             <br>
-            <div class="alert alert-info">Вопросов нет</div>
+            <div class="alert alert-info">
+                {% if LANGUAGE_CODE == 'ru' %}
+                    Вопросов нет
+                {% elif LANGUAGE_CODE == 'tt' %}
+                    Сораулар юк
+                {% else %}
+                    There is no questions
+                {% endif %}
+            </div>
         {% endfor %}
     </div>
     {% admin_pagination questions_page %}

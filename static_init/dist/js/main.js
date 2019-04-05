@@ -10,10 +10,10 @@ $(document).ready(function () {
     })
 
     let newArrivalSwiper = new Swiper('.swiper-container-news-arrival', {
-        slidesPerView: 3,
+        slidesPerView: 4,
         spaceBetween: 25,
         loop: true,
-        mousewheel: true,
+        mousewheel: false,
         autoplay: true,
         delay: 5000,
         pagination: {
@@ -26,7 +26,7 @@ $(document).ready(function () {
         },
         breakpoints: {
             1300: {
-                slidesPerView: 2,
+                slidesPerView: 3,
             },
             768: {
                 slidesPerView: 1,
@@ -37,7 +37,7 @@ $(document).ready(function () {
     let eventSwiper = new Swiper('.swiper-container-event', {
         spaceBetween: 0,
         slidesPerView: 1,
-        mousewheel: true,
+        mousewheel: false,
         loop: true,
         autoplay: true,
         delay: 10000,
@@ -161,6 +161,7 @@ MicroModal.init({
     var TabComponent = function tabComponentConstructor(selector) {
         var element = document.querySelector(selector);
         if (!element || !element.nodeType) {
+            return;
             throw new Error('The DOM element was not found when creating the tab component');
         }
         return TabComponent.init(element);
@@ -277,5 +278,6 @@ MicroModal.init({
 
     window.tabs = TabComponent;
 })(window);
+
 
 var tabComponent = tabs('[data-tab-component]');

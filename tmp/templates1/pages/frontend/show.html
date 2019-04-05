@@ -1,0 +1,60 @@
+{% extends 'theme_frontend_base.html' %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% block title %}{{ content.title }}{% endblock %}
+{% block content %}
+    <main>
+        <div class="container">
+            <nav class="crumb">
+                <ol class="crumb__list">
+                    <li>
+                        <a href="{% url 'index:frontend:index' %}">
+                            {% if LANGUAGE_CODE == 'ru' %}
+                                Главная
+                            {% elif LANGUAGE_CODE == 'tt' %}
+                                Төп бит
+                            {% else %}
+                                Home
+                            {% endif %}
+                        </a>
+                    </li>
+                    {% for ancestor in content.page.get_ancestors_titles %}
+                        <li>
+                            <a href="{% url 'pages:frontend:show' ancestor.url_path %}">
+                                {% if not ancestor.title %}
+                                    {{ ancestor }}
+                                {% else %}
+                                    {{ ancestor.title }}
+                                {% endif %}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    <li>
+                        <span class="crumb__current">
+                            {% if not content.title %}
+                                заглавие страницы для этого языка не указано.
+                            {% else %}
+                                {{ content.title }}
+                            {% endif %}
+                        </span>
+                    </li>
+                </ol>
+            </nav>
+            <div class="row">
+                <div class="col-lg-7 col-md-12">
+                    <div class="content">
+                        <h1 class="content__title">
+                            {% if not content.title %}
+                                заглавие страницы для этого языка не указано.
+                            {% else %}
+                                {{ content.title }}
+                            {% endif %}
+                        </h1>
+                        {{ content.content|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
