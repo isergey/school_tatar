@@ -306,7 +306,7 @@ const MapBoxItem = React.createClass({
             <div className="map-nav-result__item">
                 <a className="map-nav-result__link"
                    target={this.props.href ? '_blank' : ''}
-                   href={this.props.href || '#1'}
+                   href={'//kitap.tatar.ru' + this.props.href || '#1'}
                 >{this.props.name}</a>
                 {this.renderDistance()}
             </div>
