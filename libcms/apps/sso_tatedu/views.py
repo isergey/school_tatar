@@ -134,8 +134,12 @@ def _create_grs_from_user(oid, email='', user_attrs=None):
     #         foreigner = u'1'
 
     birth_date = person_info.get('birth_year', '')
+    birth_month = person_info.get('birth_month', '')
+    birth_day = person_info.get('birth_day', '')
+
     if birth_date:
-        birth_date += '0101'
+        birth_date += birth_month
+        birth_date += birth_day
 
     record = grs.Record()
 
